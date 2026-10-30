@@ -3,7 +3,7 @@
 //
 // WHY THIS FILE EXISTS: a judge must go from landing to a playing video
 // in under 30 seconds, with no login and no wait on a cold platform scan.
-// These ten videos are already rendered; Judge Mode serves them, it
+// These eleven videos are already rendered; Judge Mode serves them, it
 // does not render new ones (no HeyGen spend from this page).
 //
 // WHY THE VIDEOS LIVE IN public/: HeyGen's signed video URLs expire
@@ -13,7 +13,7 @@
 // freshly generated: "previously completed real run" is the honest label
 // adopted for all pre-generated videos.
 //
-// The ten demos (scanIds verified against rankall_scans; scores and
+// The eleven demos (scanIds verified against rankall_scans; scores and
 // mentioned counts verified against rankall_scans + platform rows):
 //   Tech Ridge Dental — Oct 27, 2026, score 85, Spark-written script.
 //   Kinsler Family Dentistry — Oct 27, 2026, score 85, rule-based
@@ -31,6 +31,13 @@
 //   Victorious (SEO) — Oct 28, 2026, score 2, mentioned 1 of 12.
 //   Stumptown Coffee Roasters (Global) — Oct 28, 2026, score 42,
 //     mentioned 8 of 12.
+//   Low-scorer card (RT-78, Oct 30, 2026): one more demo, the lowest
+//     score on the page, rule-based fallback script (flagged on its
+//     delivery view via the stored job row, not hidden):
+//   Kinsler Family Dentistry (generic scan) — Oct 8, 2026, score 2,
+//     mentioned 2 of 11 (Claude + DeepSeek), Abigail + Bella presenter,
+//     founder-confirmed. Distinct from the Oct 27 Kinsler 85 card above:
+//     a different scan, never an overwrite of it.
 
 export interface JudgeDemo {
   scanId: string;
@@ -90,6 +97,11 @@ export const JUDGE_DEMOS: JudgeDemo[] = [
     scanId: '5e252b03-1fdc-4928-822a-a4d4a94217aa',
     videoPath: '/judge-videos/stumptown.mp4',
     runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '2f5d9bbe-126d-41ca-81db-5568453fb610',
+    videoPath: '/judge-videos/kinsler-abigail-bella.mp4',
+    runLabel: 'Previously completed real run — Oct 8, 2026',
   },
 ];
 

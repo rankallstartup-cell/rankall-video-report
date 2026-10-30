@@ -24,10 +24,10 @@ function sparkJob(): CompletedJobEvidence {
 }
 
 describe('judge demos', () => {
-  it('lists exactly 10 demos with unique scanIds and durable video paths', () => {
-    expect(JUDGE_DEMOS).toHaveLength(10);
+  it('lists exactly 11 demos with unique scanIds and durable video paths', () => {
+    expect(JUDGE_DEMOS).toHaveLength(11);
     const ids = new Set(JUDGE_DEMOS.map((d) => d.scanId));
-    expect(ids.size).toBe(10);
+    expect(ids.size).toBe(11);
     for (const d of JUDGE_DEMOS) {
       expect(d.videoPath.startsWith('/judge-videos/')).toBe(true);
       expect(d.videoPath.endsWith('.mp4')).toBe(true);
@@ -56,6 +56,14 @@ describe('judge demos', () => {
       expect(demo?.videoPath).toBe(videoPath);
       expect(demo?.runLabel).toContain(date);
     }
+  });
+
+  it('includes the score-2 Kinsler generic scan as a distinct eleventh demo (RT-78)', () => {
+    const low = getJudgeDemo('2f5d9bbe-126d-41ca-81db-5568453fb610');
+    expect(low?.videoPath).toBe('/judge-videos/kinsler-abigail-bella.mp4');
+    expect(low?.runLabel).toContain('Oct 8, 2026');
+    // The Oct 27 Kinsler 85 card is untouched: different scan, different file.
+    expect(getJudgeDemo('c651634a-9ad0-4823-9f4e-3d42ab4ef3be')?.videoPath).toBe('/judge-videos/kinsler.mp4');
   });
 
   it('returns null for unknown scans', () => {
