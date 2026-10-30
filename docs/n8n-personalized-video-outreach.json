@@ -1,0 +1,633 @@
+{
+  "name": "Rankall.io Personalized Video Outreach",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "id": "node-1",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.apollo.io/v1/people/search",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Cache-Control",
+              "value": "no-cache"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "person_titles",
+              "value": "=[\"owner\", \"founder\", \"CEO\", \"managing director\"]"
+            },
+            {
+              "name": "person_locations",
+              "value": "=[\"United States\"]"
+            },
+            {
+              "name": "per_page",
+              "value": "25"
+            }
+          ]
+        }
+      },
+      "id": "node-2",
+      "name": "Get Apollo Contacts",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const contacts = $input.all();\nconst results = [];\n\nfor (const item of contacts) {\n  const people = item.json.people || [];\n  for (const person of people) {\n    const email = person.email;\n    if (!email) continue;\n    results.push({\n      json: {\n        email,\n        firstName: person.first_name,\n        lastName: person.last_name,\n        businessName: person.organization?.name,\n        city: person.city,\n        industry: person.organization?.industry,\n        linkedinUrl: person.linkedin_url,\n        alreadyContacted: false\n      }\n    });\n  }\n}\n\nreturn results;"
+      },
+      "id": "node-3",
+      "name": "Filter Already Contacted",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.rankall.io/api/scan",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "business_name",
+              "value": "={{ $json.businessName }}"
+            },
+            {
+              "name": "city",
+              "value": "={{ $json.city }}"
+            },
+            {
+              "name": "industry",
+              "value": "={{ $json.industry }}"
+            }
+          ]
+        }
+      },
+      "id": "node-4",
+      "name": "Run AI Scan",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const item = $input.first();\nconst score = item.json.score || 0;\nconst competitor = item.json.top_competitor;\n\nif (score === 0 || !competitor) {\n  return [];\n}\n\nreturn [$input.first()];"
+      },
+      "id": "node-5",
+      "name": "Skip Zero Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.rankall.io/api/outreach/generate-video-email",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "business_name",
+              "value": "={{ $json.business_name }}"
+            },
+            {
+              "name": "owner_name",
+              "value": "={{ $json.owner_name }}"
+            },
+            {
+              "name": "city",
+              "value": "={{ $json.city }}"
+            },
+            {
+              "name": "industry",
+              "value": "={{ $json.industry }}"
+            },
+            {
+              "name": "score",
+              "value": "={{ $json.score }}"
+            },
+            {
+              "name": "competitor",
+              "value": "={{ $json.top_competitor }}"
+            },
+            {
+              "name": "competitor_score",
+              "value": "={{ $json.competitor_score }}"
+            },
+            {
+              "name": "revenue_leak",
+              "value": "={{ $json.revenue_leak }}"
+            },
+            {
+              "name": "scan_id",
+              "value": "={{ $json.scan_id }}"
+            }
+          ]
+        }
+      },
+      "id": "node-6",
+      "name": "Generate Video Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "Nandish at Rankall.io <outreach@rankall.io>"
+            },
+            {
+              "name": "to",
+              "value": "={{ $('Filter Already Contacted').item.json.email }}"
+            },
+            {
+              "name": "subject",
+              "value": "={{ $json.email_subject }}"
+            },
+            {
+              "name": "html",
+              "value": "={{ $json.email_html }}"
+            }
+          ]
+        }
+      },
+      "id": "node-7",
+      "name": "Send Email via Resend",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1560, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.rankall.io/api/outreach/track",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "name": "Authorization",
+              "value": "Bearer {{CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $('Filter Already Contacted').item.json.email }}"
+            },
+            {
+              "name": "business_name",
+              "value": "={{ $('Run AI Scan').item.json.business_name }}"
+            },
+            {
+              "name": "scan_id",
+              "value": "={{ $('Run AI Scan').item.json.scan_id }}"
+            },
+            {
+              "name": "touch",
+              "value": "1"
+            },
+            {
+              "name": "resend_id",
+              "value": "={{ $json.id }}"
+            }
+          ]
+        }
+      },
+      "id": "node-8",
+      "name": "Log Send",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1780, 300]
+    },
+    {
+      "parameters": {
+        "amount": 3,
+        "unit": "days"
+      },
+      "id": "node-9",
+      "name": "Wait 3 Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [2000, 300],
+      "webhookId": "wait-3-days"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://www.rankall.io/api/outreach/intelligence",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $('Filter Already Contacted').item.json.email }}"
+            },
+            {
+              "name": "scan_id",
+              "value": "={{ $('Run AI Scan').item.json.scan_id }}"
+            }
+          ]
+        }
+      },
+      "id": "node-10",
+      "name": "Check Email Opened",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2220, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.email_opened }}",
+              "value2": false
+            }
+          ]
+        }
+      },
+      "id": "node-11",
+      "name": "Not Opened?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [2440, 300]
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "days"
+      },
+      "id": "node-12",
+      "name": "Wait 4 More Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [2660, 300],
+      "webhookId": "wait-4-days"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://www.rankall.io/api/outreach/intelligence",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{CRON_SECRET}}"
+            }
+          ]
+        },
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "email",
+              "value": "={{ $('Filter Already Contacted').item.json.email }}"
+            },
+            {
+              "name": "scan_id",
+              "value": "={{ $('Run AI Scan').item.json.scan_id }}"
+            }
+          ]
+        }
+      },
+      "id": "node-13",
+      "name": "Check Video Viewed",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [2880, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.video_viewed }}",
+              "value2": false
+            }
+          ]
+        }
+      },
+      "id": "node-14",
+      "name": "Not Viewed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [3100, 300]
+    },
+    {
+      "parameters": {
+        "amount": 7,
+        "unit": "days"
+      },
+      "id": "node-15",
+      "name": "Wait 7 Days Final",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [3320, 300],
+      "webhookId": "wait-7-days"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.resend.com/emails",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "from",
+              "value": "Nandish at Rankall.io <outreach@rankall.io>"
+            },
+            {
+              "name": "to",
+              "value": "={{ $('Filter Already Contacted').item.json.email }}"
+            },
+            {
+              "name": "subject",
+              "value": "Closing your file, {{ $('Filter Already Contacted').item.json.firstName }}"
+            },
+            {
+              "name": "text",
+              "value": "Hi {{ $('Filter Already Contacted').item.json.firstName }},\n\nI'll stop reaching out after this.\n\nBut before I do — {{ $('Run AI Scan').item.json.top_competitor }} now appears on multiple AI platforms for searches in {{ $('Filter Already Contacted').item.json.city }}. {{ $('Filter Already Contacted').item.json.businessName }} doesn't.\n\nYour free report has the exact fixes: https://rankall.io/report/{{ $('Run AI Scan').item.json.scan_id }}\n\nIf the timing is wrong, no worries. The report will be there when you're ready.\n\n— Nandish, Rankall.io"
+            }
+          ]
+        }
+      },
+      "id": "node-16",
+      "name": "Send Touch 5 Final",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [3540, 300]
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get Apollo Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Apollo Contacts": {
+      "main": [
+        [
+          {
+            "node": "Filter Already Contacted",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Already Contacted": {
+      "main": [
+        [
+          {
+            "node": "Run AI Scan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Run AI Scan": {
+      "main": [
+        [
+          {
+            "node": "Skip Zero Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Skip Zero Score": {
+      "main": [
+        [
+          {
+            "node": "Generate Video Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Video Email": {
+      "main": [
+        [
+          {
+            "node": "Send Email via Resend",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email via Resend": {
+      "main": [
+        [
+          {
+            "node": "Log Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Log Send": {
+      "main": [
+        [
+          {
+            "node": "Wait 3 Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 3 Days": {
+      "main": [
+        [
+          {
+            "node": "Check Email Opened",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Email Opened": {
+      "main": [
+        [
+          {
+            "node": "Not Opened?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Not Opened?": {
+      "main": [
+        [
+          {
+            "node": "Wait 4 More Days",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Wait 4 More Days": {
+      "main": [
+        [
+          {
+            "node": "Check Video Viewed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Video Viewed": {
+      "main": [
+        [
+          {
+            "node": "Not Viewed?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Not Viewed?": {
+      "main": [
+        [
+          {
+            "node": "Wait 7 Days Final",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Wait 7 Days Final": {
+      "main": [
+        [
+          {
+            "node": "Send Touch 5 Final",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1.0.0",
+  "id": "rankall-video-outreach-workflow",
+  "meta": {
+    "instanceId": "rankall-n8n"
+  },
+  "tags": ["outreach", "automation", "rankall"]
+}
