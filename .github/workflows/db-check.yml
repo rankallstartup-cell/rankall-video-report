@@ -1,0 +1,89 @@
+# Runs on every pull request that touches the database.
+# Blocks the merge if a migration is unsafe, broken, or not re-runnable.
+# Guide: supabase/README.md
+name: Database checks
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/**'
+      - 'scripts/db/**'
+      - '.github/workflows/db-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rules:
+    name: Migration rules
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install 'pglast>=7,<8'
+      - name: Check every migration is named and written safely
+        run: python3 scripts/db/check_migrations.py
+      - name: Test the checker itself
+        run: python3 scripts/db/test_check_migrations.py
+
+  apply-twice:
+    name: Apply all migrations to a fresh Postgres, twice
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Postgres 17 client
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -q postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+      - name: Apply, re-apply, compare
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/postgres
+        run: bash scripts/db/test-migrations.sh
+
+  staging-preview:
+    name: Preview what will run on staging
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    # Only for branches in this repo (forks never see secrets).
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    environment: staging
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.121.0
+      - name: Install Postgres 17 client
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -q postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+      - name: Dry run against staging (changes nothing)
+        env:
+          DB_URL_STAGING: ${{ secrets.SUPABASE_DB_URL_STAGING }}
+          TARGET: staging
+          DRY_RUN: '1'
+        run: |
+          if [ -z "$DB_URL_STAGING" ]; then
+            echo "::notice::SUPABASE_DB_URL_STAGING is not set yet — skipping the staging preview (see supabase/README.md)."
+            exit 0
+          fi
+          bash scripts/db/migrate.sh

@@ -1,0 +1,84 @@
+# Applies new migrations automatically after a merge:
+#   merge into `staging` -> staging database   (runs straight away)
+#   merge into `main`    -> production database (waits for approval if the
+#                           "production" environment has required reviewers)
+# Every applied migration is recorded in supabase_migrations.schema_migrations.
+# Guide: supabase/README.md
+name: Database migrate
+
+on:
+  push:
+    branches: [staging, main]
+    paths:
+      - 'supabase/migrations/**'
+      - 'supabase/migration-baseline/**'
+      - 'scripts/db/**'
+      - '.github/workflows/db-migrate.yml'
+  workflow_dispatch:
+    inputs:
+      target:
+        description: 'Which database'
+        required: true
+        type: choice
+        options: [staging, production]
+      dry_run:
+        description: 'Only show what would run (change nothing)'
+        required: false
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+jobs:
+  migrate:
+    name: Migrate ${{ github.event_name == 'workflow_dispatch' && inputs.target || (github.ref_name == 'main' && 'production' || 'staging') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: ${{ github.event_name == 'workflow_dispatch' && inputs.target || (github.ref_name == 'main' && 'production' || 'staging') }}
+    concurrency:
+      # Never run two migrations against the same database at once.
+      group: db-migrate-${{ github.event_name == 'workflow_dispatch' && inputs.target || (github.ref_name == 'main' && 'production' || 'staging') }}
+      cancel-in-progress: false
+    env:
+      TARGET: ${{ github.event_name == 'workflow_dispatch' && inputs.target || (github.ref_name == 'main' && 'production' || 'staging') }}
+    steps:
+      - name: Production only from main
+        if: env.TARGET == 'production' && github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::Production can only be migrated from the main branch (this run is on ${{ github.ref_name }})."
+          exit 1
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Safety check before touching any database
+        run: |
+          pip install -q 'pglast>=7,<8'
+          python3 scripts/db/check_migrations.py
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.121.0
+
+      - name: Install Postgres 17 client
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q postgresql-common
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
+          sudo apt-get install -y -q postgresql-client-17
+          echo "/usr/lib/postgresql/17/bin" >> "$GITHUB_PATH"
+
+      - name: Apply migrations
+        env:
+          # Each environment only ever gets its own secret; the script also checks
+          # the URL points at the right Supabase project before doing anything.
+          DB_URL_STAGING: ${{ env.TARGET == 'staging' && secrets.SUPABASE_DB_URL_STAGING || '' }}
+          DB_URL_PRODUCTION: ${{ env.TARGET == 'production' && secrets.SUPABASE_DB_URL_PRODUCTION || '' }}
+          # Manual run: as chosen. Merge to staging: apply. Merge to main: preview only
+          # until the owner sets the repository variable AUTO_MIGRATE_PRODUCTION=true.
+          DRY_RUN: ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '1' || (github.event_name == 'push' && github.ref_name == 'main' && vars.AUTO_MIGRATE_PRODUCTION != 'true') && '1' || '0' }}
+        run: bash scripts/db/migrate.sh
