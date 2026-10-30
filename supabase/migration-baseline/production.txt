@@ -1,0 +1,39 @@
+# Migrations that were ALREADY applied to production by hand before the
+# automatic pipeline existed (checked against the live production schema on 2026-10-17).
+#
+# Used exactly once: the first time .github/workflows/db-migrate.yml runs against
+# production and finds its migration history empty, it records these as "applied"
+# (supabase migration repair) so they are NOT run again. Every migration not
+# listed here is then applied normally.
+#
+# After that first run this file is never read again. Do not add new files here.
+#
+# Production had drifted: many older migrations were only partly applied.
+# Those are NOT listed, so the first production run applies them (all are
+# re-runnable). Review that run's dry-run list before approving it.
+
+20260101000000_baseline_hand_made_tables.sql
+20260616000100_agency_outreach_intelligence.sql
+20260616000300_cancel_feedback.sql
+20260623000100_demo_videos.sql
+20260623000200_knowledge_panel.sql
+20260623000300_market_index.sql
+20260625000100_agency_tier.sql
+20260626000100_proposal_columns.sql
+20260626000200_simulator.sql
+20260627000100_agency_columns.sql
+20260628000300_product_tour.sql
+20260628000400_scan_cache.sql
+20260628000500_usage_limits.sql
+20260630000100_linkedin_manual_queue.sql
+20260701000100_data_quality.sql
+20260701000200_subscriptions_rls.sql
+20260702000100_outreach_sequence.sql
+20260703000100_fix_predictions.sql
+20260703000200_generated_fixes.sql
+20260703000300_generated_fixes_evidence.sql
+20260704000100_verified_outcomes_link.sql
+20260708000100_blog_posts.sql
+20260722000100_add_corporate_admin_email.sql
+20260821000100_clean_leaked_fix_content.sql
+20260821000200_crawler_check_columns.sql
