@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 300">
+  <!-- Rankall mark: slanted bar + dot, brand blue #0000FF -->
+  <g transform="translate(-280,-795)" fill="#0000FF">
+    <rect x="357.8" y="805" width="96" height="280" rx="48" transform="rotate(34.5 405.8 945)"/>
+    <circle cx="524.4" cy="999.5" r="49.5"/>
+  </g>
+</svg>
