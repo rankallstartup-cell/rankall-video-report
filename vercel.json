@@ -1,0 +1,93 @@
+{
+  "functions": {
+    "app/api/scan/route.ts": {
+      "maxDuration": 60
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/trigger-rescans",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/trigger-sequence",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cron/personal-monitor",
+      "schedule": "0 7 * * 1"
+    },
+    {
+      "path": "/api/cron/agency-rescan",
+      "schedule": "0 9 * * 1"
+    },
+    {
+      "path": "/api/cron/outreach-optimize",
+      "schedule": "0 7 * * 1"
+    },
+    {
+      "path": "/api/cron/outreach-sequence",
+      "schedule": "0 9 * * 1-5"
+    },
+    {
+      "path": "/api/market-index/generate",
+      "schedule": "0 6 1 * *"
+    },
+    {
+      "path": "/api/cron/score-decay-warning",
+      "schedule": "0 8 * * 3"
+    },
+    {
+      "path": "/api/cron/winback-email",
+      "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/blog-generate",
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/cron/re-engagement",
+      "schedule": "0 10 * * *"
+    },
+    {
+      "path": "/api/cron/monthly-roi",
+      "schedule": "0 9 1 * *"
+    },
+    {
+      "path": "/api/cron/referral-invite",
+      "schedule": "0 10 * * 1"
+    },
+    {
+      "path": "/api/cron/weekly-visibility-report",
+      "schedule": "0 8 * * 1"
+    },
+    {
+      "path": "/api/demo/generate-video",
+      "schedule": "0 6 * * 0"
+    },
+    {
+      "path": "/api/content/tiktok-script",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/content/linkedin-post",
+      "schedule": "0 8 * * 1-5"
+    },
+    {
+      "path": "/api/cron/generate-tour",
+      "schedule": "0 6 * * 0"
+    },
+    {
+      "path": "/api/cron/reset-outreach",
+      "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cron/expire-trials",
+      "schedule": "0 8 * * *"
+    },
+    {
+      "path": "/api/cron/outreach-pipeline",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}
