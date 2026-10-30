@@ -11,7 +11,7 @@ its customers. Then one click claims the full written report.
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report/judge
 - **Live front door** — run a fresh scan and watch a video generate:
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report
-- **Demo video (screen walkthrough v3, 2:17, founder-approved Oct 27)** — link lands here once the public repo push resumes (front door, fresh scan, real video-report clip, director + Meta beats, business-page segment labeled pre-existing).
+- **Demo video (screen walkthrough v3, 2:17, founder-approved Oct 27)** — https://github.com/rankallstartup-cell/rankall-video-report/blob/main/demo-walkthrough-v3.mp4 (front door, fresh scan, real video-report clip, director + Meta beats, business-page segment labeled pre-existing).
 
 Every demo video on the judge page is labeled with its real run date as a
 **previously completed real run** — never presented as freshly generated.
@@ -127,7 +127,7 @@ the Day 6 batch covers at least one video per tier.
 - **Mistral**: RESOLVED Oct 27 — the weeks-long 429 was Free-plan exhaustion, not code. Account upgraded to Pro, key rotated, and the preview gate scan of Oct 27 20:59 CDT (scanId `8d85ebea-9c97-4100-aa26-a98f026c611b`) mentioned 12/12 platforms with Mistral AND Kimi both succeeding. No code fix is claimed for an account limit; the account fix is what closed the gate.
 - **Kimi**: fixed in-window — empty-content retries escalate the token
   budget 300 → 1000 (reasoning is ~1,500 characters); verified live.
-- **Demo video**: screen walkthrough v3, 2:17, founder-approved Oct 27; link added here once the public repo push resumes.
+- **Demo video**: screen walkthrough v3, 2:17, founder-approved Oct 27; https://github.com/rankallstartup-cell/rankall-video-report/blob/main/demo-walkthrough-v3.mp4.
 
 ## Run it locally
 
