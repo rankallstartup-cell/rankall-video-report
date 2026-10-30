@@ -3,7 +3,7 @@
 //
 // WHY THIS FILE EXISTS: a judge must go from landing to a playing video
 // in under 30 seconds, with no login and no wait on a cold platform scan.
-// These three videos are already rendered; Judge Mode serves them, it
+// These ten videos are already rendered; Judge Mode serves them, it
 // does not render new ones (no HeyGen spend from this page).
 //
 // WHY THE VIDEOS LIVE IN public/: HeyGen's signed video URLs expire
@@ -13,12 +13,24 @@
 // freshly generated: "previously completed real run" is the honest label
 // adopted for all pre-generated videos.
 //
-// The three demos (scanIds verified against rankall_scans):
+// The ten demos (scanIds verified against rankall_scans; scores and
+// mentioned counts verified against rankall_scans + platform rows):
 //   Tech Ridge Dental — Oct 27, 2026, score 85, Spark-written script.
 //   Kinsler Family Dentistry — Oct 27, 2026, score 85, rule-based
 //     fallback script (Spark returned empty content; flagged, not hidden).
 //   Dentists of Folsom — Oct 8, 2026, score 35, mentioned 7 of 11,
 //     rule-based fallback script. The low-score demo: the wound is real.
+//   Tier expansion (RT-109, Oct 29, 2026): seven more demos, one per
+//     remaining tier, all rule-based fallback scripts (flagged on
+//     their delivery views via the stored job row, not hidden):
+//   Paras Pipalia (Personal) — Oct 7, 2026, score 17, mentioned 8 of 11.
+//   Topo Designs (Product) — Oct 28, 2026, score 41, mentioned 8 of 12.
+//   SV & Co (Agency) — Oct 7, 2026, score 0, mentioned 0 of 11.
+//   Acumatica (Enterprise) — Oct 28, 2026, score 30, mentioned 6 of 12.
+//   City of Marfa (Government) — Oct 28, 2026, score 8, mentioned 3 of 12.
+//   Victorious (SEO) — Oct 28, 2026, score 2, mentioned 1 of 12.
+//   Stumptown Coffee Roasters (Global) — Oct 28, 2026, score 42,
+//     mentioned 8 of 12.
 
 export interface JudgeDemo {
   scanId: string;
@@ -43,6 +55,41 @@ export const JUDGE_DEMOS: JudgeDemo[] = [
     scanId: 'cd149a50-d824-46ee-aab3-27fd465a225c',
     videoPath: '/judge-videos/folsom.mp4',
     runLabel: 'Previously completed real run — Oct 8, 2026',
+  },
+  {
+    scanId: 'eb3ed289-7cfb-47a6-b0c4-7ef40667273b',
+    videoPath: '/judge-videos/paras.mp4',
+    runLabel: 'Previously completed real run — Oct 7, 2026',
+  },
+  {
+    scanId: 'a8bda6dc-51f0-44b6-af30-63b562856453',
+    videoPath: '/judge-videos/topo.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '3923d3a8-5794-4913-9caf-fe36f25dadd8',
+    videoPath: '/judge-videos/sv-co.mp4',
+    runLabel: 'Previously completed real run — Oct 7, 2026',
+  },
+  {
+    scanId: '26474355-ec64-4c70-bdb4-90bc27f0052f',
+    videoPath: '/judge-videos/acumatica.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '8275ed3c-41c2-41e8-a202-544891eca315',
+    videoPath: '/judge-videos/marfa.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: 'c617690f-d8d9-477d-9333-f59ef99b48dd',
+    videoPath: '/judge-videos/victorious.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '5e252b03-1fdc-4928-822a-a4d4a94217aa',
+    videoPath: '/judge-videos/stumptown.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
   },
 ];
 

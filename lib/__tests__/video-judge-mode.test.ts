@@ -24,10 +24,10 @@ function sparkJob(): CompletedJobEvidence {
 }
 
 describe('judge demos', () => {
-  it('lists exactly 3 demos with unique scanIds and durable video paths', () => {
-    expect(JUDGE_DEMOS).toHaveLength(3);
+  it('lists exactly 10 demos with unique scanIds and durable video paths', () => {
+    expect(JUDGE_DEMOS).toHaveLength(10);
     const ids = new Set(JUDGE_DEMOS.map((d) => d.scanId));
-    expect(ids.size).toBe(3);
+    expect(ids.size).toBe(10);
     for (const d of JUDGE_DEMOS) {
       expect(d.videoPath.startsWith('/judge-videos/')).toBe(true);
       expect(d.videoPath.endsWith('.mp4')).toBe(true);
@@ -39,6 +39,23 @@ describe('judge demos', () => {
       expect(d.runLabel).toContain('Previously completed real run');
     }
     expect(getJudgeDemo('cd149a50-d824-46ee-aab3-27fd465a225c')?.runLabel).toContain('Oct 8, 2026');
+  });
+
+  it('covers the 7 tier-expansion demos (RT-109) with their verified run dates', () => {
+    const expected: Array<[string, string, string]> = [
+      ['eb3ed289-7cfb-47a6-b0c4-7ef40667273b', '/judge-videos/paras.mp4', 'Oct 7, 2026'],
+      ['a8bda6dc-51f0-44b6-af30-63b562856453', '/judge-videos/topo.mp4', 'Oct 28, 2026'],
+      ['3923d3a8-5794-4913-9caf-fe36f25dadd8', '/judge-videos/sv-co.mp4', 'Oct 7, 2026'],
+      ['26474355-ec64-4c70-bdb4-90bc27f0052f', '/judge-videos/acumatica.mp4', 'Oct 28, 2026'],
+      ['8275ed3c-41c2-41e8-a202-544891eca315', '/judge-videos/marfa.mp4', 'Oct 28, 2026'],
+      ['c617690f-d8d9-477d-9333-f59ef99b48dd', '/judge-videos/victorious.mp4', 'Oct 28, 2026'],
+      ['5e252b03-1fdc-4928-822a-a4d4a94217aa', '/judge-videos/stumptown.mp4', 'Oct 28, 2026'],
+    ];
+    for (const [scanId, videoPath, date] of expected) {
+      const demo = getJudgeDemo(scanId);
+      expect(demo?.videoPath).toBe(videoPath);
+      expect(demo?.runLabel).toContain(date);
+    }
   });
 
   it('returns null for unknown scans', () => {
