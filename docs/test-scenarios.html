@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test scenarios — Rankall video reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #F6F6FB; color: #44445a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 56px; }
+.eyebrow { color: #1B17FF; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+h1 { color: #0e0e2a; font-size: 32px; line-height: 1.15; margin: 8px 0 12px; }
+.summary { font-size: 18px; margin: 0 0 8px; }
+.card { background: #fff; border-radius: 16px; border-top: 4px solid #1B17FF; box-shadow: 0 1px 3px rgba(16,16,60,.08); padding: 24px; margin: 20px 0; }
+.card h2 { color: #0e0e2a; font-size: 22px; margin: 0 0 12px; }
+.card h3 { color: #0e0e2a; font-size: 18px; margin: 20px 0 8px; }
+.card p { margin: 0 0 12px; }
+.card ul, .card ol { margin: 0 0 12px; padding-left: 22px; }
+.card li { margin-bottom: 6px; }
+a { color: #1B17FF; }
+.callout { background: #eef0ff; border-left: 4px solid #1B17FF; border-radius: 8px; padding: 14px 16px; margin: 16px 0; }
+.callout p { margin: 0; }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; min-width: 680px; width: 100%; font-size: 15px; }
+th { background: #ececff; color: #0e0e2a; text-align: left; padding: 10px 12px; }
+td { padding: 10px 12px; border-bottom: 1px solid #e6e6f2; vertical-align: top; }
+td.ev { word-break: break-all; }
+.pass { display: inline-block; background: #e6f6ec; color: #137333; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 2px 10px; }
+code { background: #f0f0fa; border-radius: 6px; padding: 1px 6px; font-size: .92em; word-break: break-all; }
+pre { background: #0e0e2a; color: #f2f2ff; border-radius: 12px; padding: 16px; overflow-x: auto; font-size: 14px; }
+footer { color: #77778c; font-size: 14px; margin-top: 28px; }
+@media (max-width: 480px) {
+  .wrap { padding: 20px 12px 40px; }
+  h1 { font-size: 26px; }
+  .card { padding: 18px 16px; }
+  table { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="eyebrow">Rankall video reports — submission docs</p>
+<h1>Test scenarios</h1>
+<p class="summary">A curated set of 22 real cases, each with what was expected, what actually happened, the result, and the evidence. Nothing here is invented: every case traces to a test run, a live check, a scan record, or a job record.</p>
+
+<section class="card">
+<h2>How to read this</h2>
+<ul>
+<li><strong>Expected</strong> is what the case required before it ran.</li>
+<li><strong>Actual</strong> is what was observed.</li>
+<li><strong>Result</strong> is Pass only when the actual matched the expected. Parked items are not in this table — they are listed in the test plan, not claimed here.</li>
+<li><strong>Evidence</strong> names the artifact that proves it: a public commit, a scan record, a job record, or a measured size. Short commit hashes refer to the public repo.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Scenarios</h2>
+<div class="table-wrap"><table>
+<tr><th>ID</th><th>Case</th><th>Expected</th><th>Actual</th><th>Result</th><th>Evidence</th></tr>
+<tr><td>S01</td><td>Judge page loads without login, 11 cards</td><td>Page 200, 11 video references, no login</td><td>Page 200, 11 video references, signed-out</td><td><span class="pass">Pass</span></td><td class="ev">Live preview judge page</td></tr>
+<tr><td>S02</td><td>Gantos card facts</td><td>Score 2, 0 of 11 platforms, Aug 25 2026, Naperville dentist</td><td>Card shows exactly those facts</td><td><span class="pass">Pass</span></td><td class="ev">Scan <code>41fc6cf3-1e08-4667-b427-74d47d59869a</code>; video 16,185,623 bytes</td></tr>
+<tr><td>S03</td><td>Removed Personal card fully absent</td><td>Removed card's name, scan reference, and video file return zero hits on the served page</td><td>Zero hits on all three</td><td><span class="pass">Pass</span></td><td class="ev">Live preview judge page</td></tr>
+<tr><td>S04</td><td>Other cards untouched by the swap</td><td>The other 10 videos serve at their exact bytes</td><td>All 10 at exact bytes</td><td><span class="pass">Pass</span></td><td class="ev">Live preview video checks</td></tr>
+<tr><td>S05</td><td>Tier-expansion cards</td><td>7 new cards with correct scores, mentions, and dates</td><td>All 7 correct at build time (Topo 41, SV &amp; Co 0, Acumatica 30, Marfa 8, Victorious 2, Stumptown 42, Personal 17); the Personal card was later replaced (see S02–S03)</td><td><span class="pass">Pass</span></td><td class="ev">Public <code>dc79d78b</code>; targeted 12/12</td></tr>
+<tr><td>S06</td><td>Low-scorer card</td><td>Generic scan resolves to a real dental business, score 2, 2 of 11 platforms, Oct 8 2026</td><td>Card shows exactly that; video 46.92 s</td><td><span class="pass">Pass</span></td><td class="ev">Scan <code>2f5d9bbe-126d-41ca-81db-5568453fb610</code>; video 15,484,181 bytes; public <code>30990782</code>; targeted 13/13</td></tr>
+<tr><td>S07</td><td>Pacing prompt target</td><td>Prompt target reads about 840 characters (about 167 words)</td><td>Target reads exactly "Target about 840 characters (about 167 words) of total narration."</td><td><span class="pass">Pass</span></td><td class="ev">Public <code>34e26e11</code>; targeted 10/10; no render run</td></tr>
+<tr><td>S08</td><td>Spark retry proof</td><td>Empty content retries, max 3 attempts, then a Spark script</td><td>Two empties, Spark script on attempt 3; job completed in 401 s for $2.17</td><td><span class="pass">Pass</span></td><td class="ev">Job <code>job_1793126697397_88e08dc1</code></td></tr>
+<tr><td>S09</td><td>Kimi empty-content fix</td><td>Empty content retries with a larger token budget</td><td>Token budget escalates 300 → 1,000; verified live</td><td><span class="pass">Pass</span></td><td class="ev">Live verification run</td></tr>
+<tr><td>S10</td><td>Mistral verification, first scan</td><td>Mistral succeeds on a 12-platform scan</td><td>12 of 12 platforms mentioned, Mistral succeeding</td><td><span class="pass">Pass</span></td><td class="ev">Scan <code>8d85ebea-9c97-4100-aa26-a98f026c611b</code></td></tr>
+<tr><td>S11</td><td>Mistral verification, second scan</td><td>A second scan also mentions Mistral after the account action</td><td>Second scan mentions Mistral; account action closed it, no code fix claimed</td><td><span class="pass">Pass</span></td><td class="ev">Scan <code>5a014aea-5f46-4685-87f7-1154eee6bc1f</code></td></tr>
+<tr><td>S12</td><td>Presenter allowlist</td><td>Listed presenters pass; unlisted ids are rejected before any job or spend</td><td>Listed pass, unlisted rejected with an allowlist error</td><td><span class="pass">Pass</span></td><td class="ev">Integration probes</td></tr>
+<tr><td>S13</td><td>Voice pairing</td><td>Each presenter maps to one voice; unknown pairings are rejected</td><td>Dante/Julian → Eric; Abigail/Saoirse → Bella; unknown rejected</td><td><span class="pass">Pass</span></td><td class="ev">Integration probes</td></tr>
+<tr><td>S14</td><td>Job store honest failure</td><td>Store unavailable answers service-unavailable, never silent in-memory fallback on the preview</td><td>Code path returns service-unavailable when the store is unavailable; no in-memory fallback path exists on the preview</td><td><span class="pass">Pass</span></td><td class="ev">Code + route behavior</td></tr>
+<tr><td>S15</td><td>Checkpoint and resume</td><td>Job resumes from the last checkpoint; a started render is re-polled, never re-started; a 10-minute stall fails naming its stage</td><td>Resume, re-poll, and stall-failure behavior all as designed</td><td><span class="pass">Pass</span></td><td class="ev">Job store design + live runs</td></tr>
+<tr><td>S16</td><td>Fallback flagging</td><td>Fallback scripts are flagged on the delivery view from the stored job record</td><td>Delivery view adds the fallback step when the job record is not a Spark script; judge cards show run labels only, no per-card badge claimed</td><td><span class="pass">Pass</span></td><td class="ev">Job records; delivery-view behavior</td></tr>
+<tr><td>S17</td><td>Pre-existing scans keep original counts</td><td>Older demos keep 11 or fewer platforms, no Meta line added</td><td>Folsom shows 7 of 11 with no Meta line; nothing backfilled</td><td><span class="pass">Pass</span></td><td class="ev">Scan <code>cd149a50-d824-46ee-aab3-27fd465a225c</code>; live judge page</td></tr>
+<tr><td>S18</td><td>Walkthrough plays inline</td><td>Demo video serves as video/mp4 and plays without login</td><td>Served as video/mp4, 8,675,519 bytes, 2 min 17 s, inline playback</td><td><span class="pass">Pass</span></td><td class="ev">Public <code>d7557469</code>; live preview video check</td></tr>
+<tr><td>S19</td><td>Anonymous share page</td><td>A prospect views a real scan without signing in</td><td>Share page returns 200 for a real scan, signed-out</td><td><span class="pass">Pass</span></td><td class="ev">Live preview share-page check</td></tr>
+<tr><td>S20</td><td>Full run, October 29</td><td>Type check clean; full suite runs; live sweep passes; $0 spent</td><td>Type check clean; suite 2,399 passed / 59 failed / 2,458 (all 59 outside hackathon slices); sweep pages 200; wallet unchanged</td><td><span class="pass">Pass</span></td><td class="ev">October 29 run logs</td></tr>
+<tr><td>S21</td><td>Public README wall-time fix live</td><td>Live README reads 483 s / 401 s; old figures zero hits</td><td>Lines 117–118 read 483 s (first complete run) and 401 s (script-fix re-test); old figures zero hits</td><td><span class="pass">Pass</span></td><td class="ev">Public <code>93fe0b49</code>; live README check</td></tr>
+<tr><td>S22</td><td>Cost honesty</td><td>Per-video cost quoted only from clean sequential runs; batch average never quoted as a unit cost</td><td>Quoted range $1.70–$2.17 per 45–60 s video; batch $10.40 total never divided into a unit cost</td><td><span class="pass">Pass</span></td><td class="ev">Wallet-delta records; cost analysis</td></tr>
+</table></div>
+</section>
+
+<section class="card">
+<h2>Coverage note</h2>
+<p>This set is curated, not exhaustive. It covers the demo surface (judge cards, videos, share page), the pipeline's reliability mechanisms (retry, resume, fallback, honest failure), the honesty rules (original counts, flagged fallbacks, cost honesty), and the late changes (tier expansion, low-scorer card, card swap, pacing target, README fix). The full working set of checks is larger; parked items (signed-in live testing, live-browser click-through, the pacing proof render, the queued-last render, and the pending hero line) are listed in the test plan and are not in this table.</p>
+</section>
+
+<section class="card">
+<h2>Links</h2>
+<ul>
+<li>Public repo: <a href="https://github.com/rankallstartup-cell/rankall-video-report">rankall-video-report</a></li>
+<li>Judge demos (no login): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report/judge">Judge Mode</a></li>
+<li>Live front door (no login): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report">Front door</a></li>
+<li>Demo video (plays inline): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4">Screen walkthrough, 2:17</a></li>
+</ul>
+</section>
+
+<footer>
+<p>Rankall video reports — submission docs · Representative: Nandish (founder) · Contributors: Nandish and Paras Pipalia · Prepared October 31, 2026, from real build and test evidence.</p>
+</footer>
+</div>
+</body>
+</html>

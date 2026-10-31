@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Test plan — Rankall video reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #F6F6FB; color: #44445a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 56px; }
+.eyebrow { color: #1B17FF; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+h1 { color: #0e0e2a; font-size: 32px; line-height: 1.15; margin: 8px 0 12px; }
+.summary { font-size: 18px; margin: 0 0 8px; }
+.card { background: #fff; border-radius: 16px; border-top: 4px solid #1B17FF; box-shadow: 0 1px 3px rgba(16,16,60,.08); padding: 24px; margin: 20px 0; }
+.card h2 { color: #0e0e2a; font-size: 22px; margin: 0 0 12px; }
+.card h3 { color: #0e0e2a; font-size: 18px; margin: 20px 0 8px; }
+.card p { margin: 0 0 12px; }
+.card ul, .card ol { margin: 0 0 12px; padding-left: 22px; }
+.card li { margin-bottom: 6px; }
+a { color: #1B17FF; }
+.callout { background: #eef0ff; border-left: 4px solid #1B17FF; border-radius: 8px; padding: 14px 16px; margin: 16px 0; }
+.callout p { margin: 0; }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; min-width: 680px; width: 100%; font-size: 15px; }
+th { background: #ececff; color: #0e0e2a; text-align: left; padding: 10px 12px; }
+td { padding: 10px 12px; border-bottom: 1px solid #e6e6f2; vertical-align: top; }
+td.ev { word-break: break-all; }
+.pass { display: inline-block; background: #e6f6ec; color: #137333; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 2px 10px; }
+code { background: #f0f0fa; border-radius: 6px; padding: 1px 6px; font-size: .92em; word-break: break-all; }
+pre { background: #0e0e2a; color: #f2f2ff; border-radius: 12px; padding: 16px; overflow-x: auto; font-size: 14px; }
+footer { color: #77778c; font-size: 14px; margin-top: 28px; }
+@media (max-width: 480px) {
+  .wrap { padding: 20px 12px 40px; }
+  h1 { font-size: 26px; }
+  .card { padding: 18px 16px; }
+  table { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="eyebrow">Rankall video reports — submission docs</p>
+<h1>Test plan</h1>
+<p class="summary">How the entry was tested, layer by layer in order, what each layer covered, and what was honestly left parked — no parked item is claimed as passed.</p>
+
+<section class="card">
+<h2>Layers in order</h2>
+<p>Testing runs in this order. Each layer covers a different kind of risk, and a later layer never excuses an earlier layer's gap.</p>
+<div class="table-wrap"><table>
+<tr><th>Layer</th><th>What it covers</th></tr>
+<tr><td>Unit</td><td>Type check and automated test suites for the changed code, run against both the changed code and a true base (changed files reverted, hashes verified, then restored). A slice passes this layer only when its new tests pass and the full-suite failure set is unchanged.</td></tr>
+<tr><td>Manual</td><td>Signed-out live checks by a human: judge cards, front door, jobs page, videos playing, and founder listens for presenter voices. No sign-in, no credentials in the test rig.</td></tr>
+<tr><td>Integration</td><td>The seams between pieces: presenter allowlist probes, jobs API responses, and verification scans against real platform responses.</td></tr>
+<tr><td>Automation</td><td>The code-layer test runs: targeted suites for the changed files plus the full suite, with failure-set comparison against the base.</td></tr>
+<tr><td>Regression</td><td>The end-of-channel re-check: the same targeted and full suites on a true base, confirming the change adds no new failure anywhere.</td></tr>
+</table></div>
+</section>
+
+<section class="card">
+<h2>The full run on October 29</h2>
+<p>One full run covered the whole entry before the late-October slices landed:</p>
+<ul>
+<li>Type check: clean, zero errors.</li>
+<li>Full test suite: 2,399 passed, 59 failed, 2,458 total. Every one of the 59 failures sat in unrelated product areas; every hackathon slice passed. The failures were recorded as referrals for their owning areas, not hidden and not fixed by touching unrelated code.</li>
+<li>Live sweep: the judge page, front door, jobs page, and health endpoint all returned 200, and the judge videos were verified at their committed sizes.</li>
+<li>Integration probes: unlisted presenter ids were rejected; listed presenters passed the allowlist check.</li>
+<li>Signed-out manual checks: judge cards correct, front door stating 12 platforms, jobs page loading, videos valid.</li>
+<li>Cost of the whole run: $0. No renders, no scans started for testing, no sends, no sign-ins. The wallet balance was unchanged from open to close.</li>
+</ul>
+<p>A later fix run for the test failures themselves took the suite from 59 failures to 21, all still in unrelated product areas, with zero new failures introduced. The remaining 21 are not hackathon-slice failures and are not claimed as fixed here.</p>
+</section>
+
+<section class="card">
+<h2>Slice verifications</h2>
+<p>Each late change was verified the same way: targeted tests for its files, a full-suite comparison against a true base, and live checks where the change has a visible surface.</p>
+<div class="table-wrap"><table>
+<tr><th>Change</th><th>Targeted tests</th><th>Full-suite comparison</th><th>Live checks</th></tr>
+<tr><td>Judge Mode tier expansion (7 cards added)</td><td>12/12, base 11/11</td><td>Failure set unchanged</td><td>Judge page 200, all 7 new videos at exact bytes</td></tr>
+<tr><td>Low-scorer card added (score-2 generic scan)</td><td>13/13, base 12/12</td><td>Failure set unchanged</td><td>Judge page 200, all 11 videos at exact bytes</td></tr>
+<tr><td>Judge-card swap (Personal card out, Gantos card in)</td><td>14/14, base 13/13</td><td>2,440 passed / 21 failed / 2,461 vs base 2,439 / 21 / 2,460; failure set empty-diff</td><td>Judge page 200, Gantos card facts present, removed card zero hits, all other videos at exact bytes</td></tr>
+<tr><td>Script pacing target (about 840 characters)</td><td>10/10, base 6/6</td><td>2,444 passed / 21 failed / 2,465 vs base 2,440 / 21 / 2,461; failure set empty-diff</td><td>Pages 200 (deploy check only — the change has no visible surface)</td></tr>
+<tr><td>Public README wall-time fix</td><td>Text change, no code tests</td><td>Not applicable</td><td>Live README lines 117–118 read 483 s / 401 s; old figures zero hits</td></tr>
+</table></div>
+<div class="callout"><p>A "failure set empty-diff" means the changed-code run and the base run failed exactly the same tests — the change added no new failure. Every full-suite comparison above was a true base run, not a comparison against a stale baseline.</p></div>
+</section>
+
+<section class="card">
+<h2>Live checks</h2>
+<p>These checks ran signed-out (no login, no credentials) against the public preview:</p>
+<ul>
+<li>Judge page, front door, jobs page: 200.</li>
+<li>Health endpoint: 200, reporting the pipeline enabled.</li>
+<li>All 11 judge videos: served as video/mp4 at their exact committed bytes, including the Gantos video at 16,185,623 bytes and the low-scorer video at 15,484,181 bytes.</li>
+<li>Screen walkthrough demo video: served as video/mp4 at 8,675,519 bytes, 2 minutes 17 seconds, playing inline.</li>
+<li>Anonymous share page for a real scan: 200 (the share loader fix that lets prospects view a scan without signing in).</li>
+<li>Judge page works with no login: every check above ran without cookies or credentials.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Honestly parked</h2>
+<p>These items were not verified and are not claimed as passed. Each states what would unblock it.</p>
+<ol>
+<li><strong>Signed-in live testing.</strong> Never run: the test rig holds no credentials and never signs in. What would unblock it: a signed-in check by the product owner on their own account. Until then, signed-in surfaces are covered by code reads only, never claimed as live-verified.</li>
+<li><strong>Live-browser click-through.</strong> Parked: the delivery-view click path for the newest judge card (confirming the fallback flag shows on the delivery view reached from the card) was verified by code read only — the mechanism is proven in code, the click itself was not run. What would unblock it: a live-browser pass over the judge-card path.</li>
+<li><strong>Pacing proof render.</strong> No render was run for the 840-character target, and none is claimed. The target is verified as a code value and by arithmetic (50.44 s from 700 characters → about 840 characters for about 60 seconds). What would unblock a rendered-length claim: a separately approved render.</li>
+<li><strong>Bob's Red Mill render.</strong> Approved to run last, after the final submission tasks. Not yet run, not claimed. What would unblock it: its turn in the order, with its presenter picked at render time.</li>
+<li><strong>Judge-page hero line.</strong> Decided (a line about the low scorers) but not yet on the page. Not claimed as present. What would unblock it: the line being built onto the page.</li>
+</ol>
+</section>
+
+<section class="card">
+<h2>Coverage note</h2>
+<p>The 11 judge cards span 7 segments in substance: Local (5 dental cards), Product, Agency, Enterprise, Government, SEO, and Global Brand Intelligence. There is no Personal demo card today — the Personal card was replaced by a company card by founder choice (see the development plan). Any material that describes the judge demos as covering every segment is stale and should be corrected, not repeated.</p>
+</section>
+
+<section class="card">
+<h2>What "pass" means here</h2>
+<p>A slice is described as passing only for the layers and checks actually run on it, with the evidence listed. Parked items are never folded into a pass. A code change with no visible surface (like the pacing target) is verified by its tests and by deploy checks, and the limit of those checks is stated, not hidden.</p>
+</section>
+
+<footer>
+<p>Rankall video reports — submission docs · Representative: Nandish (founder) · Contributors: Nandish and Paras Pipalia · Prepared October 31, 2026, from real build and test evidence.</p>
+</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical plan — Rankall video reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #F6F6FB; color: #44445a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 56px; }
+.eyebrow { color: #1B17FF; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+h1 { color: #0e0e2a; font-size: 32px; line-height: 1.15; margin: 8px 0 12px; }
+.summary { font-size: 18px; margin: 0 0 8px; }
+.card { background: #fff; border-radius: 16px; border-top: 4px solid #1B17FF; box-shadow: 0 1px 3px rgba(16,16,60,.08); padding: 24px; margin: 20px 0; }
+.card h2 { color: #0e0e2a; font-size: 22px; margin: 0 0 12px; }
+.card h3 { color: #0e0e2a; font-size: 18px; margin: 20px 0 8px; }
+.card p { margin: 0 0 12px; }
+.card ul, .card ol { margin: 0 0 12px; padding-left: 22px; }
+.card li { margin-bottom: 6px; }
+a { color: #1B17FF; }
+.callout { background: #eef0ff; border-left: 4px solid #1B17FF; border-radius: 8px; padding: 14px 16px; margin: 16px 0; }
+.callout p { margin: 0; }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; min-width: 680px; width: 100%; font-size: 15px; }
+th { background: #ececff; color: #0e0e2a; text-align: left; padding: 10px 12px; }
+td { padding: 10px 12px; border-bottom: 1px solid #e6e6f2; vertical-align: top; }
+td.ev { word-break: break-all; }
+.pass { display: inline-block; background: #e6f6ec; color: #137333; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 2px 10px; }
+code { background: #f0f0fa; border-radius: 6px; padding: 1px 6px; font-size: .92em; word-break: break-all; }
+pre { background: #0e0e2a; color: #f2f2ff; border-radius: 12px; padding: 16px; overflow-x: auto; font-size: 14px; }
+footer { color: #77778c; font-size: 14px; margin-top: 28px; }
+@media (max-width: 480px) {
+  .wrap { padding: 20px 12px 40px; }
+  h1 { font-size: 26px; }
+  .card { padding: 18px 16px; }
+  table { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="eyebrow">Rankall video reports — submission docs</p>
+<h1>Technical plan</h1>
+<p class="summary">How a real scan becomes a presenter video: the pipeline stages, the job store that survives interruptions, the honesty rules the video can never break, and the measured cost and limits.</p>
+
+<section class="card">
+<h2>Pipeline, stage by stage</h2>
+<p>A visitor's scan produces aggregates only. From there, the pipeline runs in order:</p>
+<ol>
+<li><strong>Scan aggregates.</strong> The scan result is reduced to aggregates (scores, mention counts, competitor comparisons). Raw AI response text is dropped by an allowlist, even when nested.</li>
+<li><strong>Script.</strong> Muse Spark 1.3 writes the narration script from the aggregates, working within a 4,000-token budget for script work.</li>
+<li><strong>Director review.</strong> The director agent checks every number in the draft against the scan data. It rejects overclaims (for example, "zero referrals" or "hundreds" class claims) and weak hooks, and repairs them before rendering.</li>
+<li><strong>Narration.</strong> ElevenLabs narrates the approved script (Eric voice on the default path).</li>
+<li><strong>Render.</strong> HeyGen v3 renders the presenter video (Dante avatar on the default path), 720p, 16:9.</li>
+<li><strong>Delivery page.</strong> The page shows the video, the business's real numbers, one primary call to action (claim the full written report), and a labeled secondary link to the pre-existing business page where one exists.</li>
+</ol>
+<pre>Real scan → aggregates only → Spark script → director review
+→ ElevenLabs narration → HeyGen v3 render → delivery page</pre>
+</section>
+
+<section class="card">
+<h2>Job store, checkpoints, and honest failure</h2>
+<p>Video jobs live in a durable job store (the <code>video_jobs</code> table). Every job checkpoints after each stage: input, script, director, narration asset, render start, render complete.</p>
+<ul>
+<li>A later poll resumes from the last checkpoint. A started render is only re-polled, never re-started, so no work or spend is duplicated.</li>
+<li>A stall past 10 minutes with no progress fails honestly, naming the failed stage. The failure state clears the job's resume data so a failed job is never mistaken for a resumable one.</li>
+<li>If the job store is unavailable, the preview answers with an honest service-unavailable response. It never silently falls back to in-memory storage.</li>
+<li>The front door and jobs dashboard read job state from the same store, so what a visitor sees matches what the pipeline recorded.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Script, director, and retries</h2>
+<ul>
+<li><strong>Spark retry.</strong> When Spark returns empty content, the job stays processing and a later poll retries Spark — empty content only, maximum 3 attempts total. Proven live on October 28: two empty responses, then a Spark script on the third attempt; the job completed in 401 seconds for $2.17 (job <code>job_1793126697397_88e08dc1</code>).</li>
+<li><strong>Kimi fix.</strong> When the Kimi platform returns empty content because reasoning consumed the token budget, the retry escalates the token budget from 300 to 1,000. Verified live.</li>
+<li><strong>Flagged fallback.</strong> When Spark returns no usable script after retries, the video uses a rule-based fallback script — flagged on the delivery view from the stored job record, not hidden. Judge cards themselves show run labels only; no per-card badge is claimed.</li>
+<li><strong>Retry discipline.</strong> Retry logic was not weakened to make room for longer scripts. The pacing target (about 840 characters) shipped with retries exactly as proven.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Presenters and voices</h2>
+<p>Only listed presenters are accepted, and each maps to one voice. Anything else is rejected before any job or spend:</p>
+<div class="table-wrap"><table>
+<tr><th>Presenter</th><th>Voice</th></tr>
+<tr><td>Dante</td><td>Eric</td></tr>
+<tr><td>Julian</td><td>Eric</td></tr>
+<tr><td>Abigail</td><td>Bella</td></tr>
+<tr><td>Saoirse</td><td>Bella</td></tr>
+</table></div>
+<p>A missing or unlisted presenter id is rejected; there is no silent default to a different presenter.</p>
+</section>
+
+<section class="card">
+<h2>Honesty layer</h2>
+<p>These rules hold for every video, with no exceptions:</p>
+<ul>
+<li>Scripts use aggregates only. Raw AI response text is dropped entirely, even nested.</li>
+<li>NULLs stay null, never backfilled. A platform that fails a scan is recorded as missing, never as zero.</li>
+<li>The director checks every scripted number against the scan data.</li>
+<li>Fallback scripts are flagged on the delivery view, not hidden.</li>
+<li>Pre-existing scans keep their original platform counts. New scans run 12 platforms; older demos keep 11 or fewer, with no Meta line added after the fact.</li>
+<li>No mock data in demo content. Every demo video is a real scanned business.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>The 12 platforms</h2>
+<p>ChatGPT, Gemini, Google AI, Copilot, Perplexity, Grok, Claude, DeepSeek, Mistral, Kimi, Groq, and Meta AI (12th, added during the window). The front door states the count plainly: new scans run 12 platforms.</p>
+</section>
+
+<section class="card">
+<h2>Measured cost and time</h2>
+<p>All figures below are measured on real runs. Nothing here is an estimate presented as a measurement.</p>
+<div class="table-wrap"><table>
+<tr><th>Measure</th><th>Value</th><th>Evidence</th></tr>
+<tr><td>HeyGen v3 render, 45–60 s video</td><td>$1.70–$2.17</td><td>Clean sequential runs through the retry proof</td></tr>
+<tr><td>HeyGen v3 rate</td><td>About $0.038 per second</td><td>Reproduces every measured cost from video length</td></tr>
+<tr><td>Full server-side video, wall time</td><td>483 s (first complete run); 401 s (retry-proof run)</td><td>Job records; render time dominates</td></tr>
+<tr><td>Screen walkthrough demo video</td><td>2 min 17 s, 8,675,519 bytes</td><td>Committed file, plays inline</td></tr>
+<tr><td>Judge demo videos</td><td>40.0–46.9 s each</td><td>Committed files, verified at exact bytes</td></tr>
+</table></div>
+<div class="callout"><p>Cost method: the render provider's API returns no per-video charge, only a wallet balance. Cost is therefore measured as the wallet balance before and after each job — and only for strictly sequential runs.</p></div>
+<p>Two warnings from real data:</p>
+<ul>
+<li>The Day 6 batch total ($10.40 for 8 videos) is real spend, but $10.40 ÷ 8 = $1.30 per video is an accounting artifact, not a unit cost: the batch ran with an auto-reload landing mid-batch and overlapping jobs. Never quote $1.30 as a per-video cost.</li>
+<li>The sub-$1 per video target is not met on v3 at useful length: at about $0.038 per second, $1 buys about 26 seconds of video, which cannot carry the pain, the real numbers, the director evidence, and the call to action. The honest position is about $2 per video; sub-$1 is post-submission work (a cheaper engine or a different format), not a submission claim.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Limits and failure behavior</h2>
+<div class="table-wrap"><table>
+<tr><th>Situation</th><th>Behavior</th></tr>
+<tr><td>Render provider links expire (about 7 days)</td><td>Judge videos are committed files in the public repo, so judging artifacts do not expire</td></tr>
+<tr><td>Short serverless time limit</td><td>Checkpoints and poll-driven resume; a render is never lost to the limit</td></tr>
+<tr><td>Spark returns empty content</td><td>Retry, empty-content only, max 3 attempts; then flagged fallback</td></tr>
+<tr><td>Platform returns empty content (token budget)</td><td>Retry with escalated token budget (300 → 1,000)</td></tr>
+<tr><td>Platform fails a scan</td><td>Recorded as missing, never zero</td></tr>
+<tr><td>Job store unavailable</td><td>Honest service-unavailable response, never silent in-memory fallback on the preview</td></tr>
+<tr><td>Stall past 10 minutes, no progress</td><td>Honest failure naming the failed stage</td></tr>
+<tr><td>Scan-starting action clicked by mistake</td><td>Not part of testing: destination checks use link inspection only, never a click that would start a real scan</td></tr>
+</table></div>
+</section>
+
+<section class="card">
+<h2>Running it locally</h2>
+<p>Standard Next.js commands (<code>npm install</code>, <code>npm run dev</code>) with the provider configuration set as environment variables and the video-report feature flag enabled. The public repo carries the submission code, the judge videos, and these docs.</p>
+</section>
+
+<section class="card">
+<h2>Links</h2>
+<ul>
+<li>Public repo: <a href="https://github.com/rankallstartup-cell/rankall-video-report">rankall-video-report</a></li>
+<li>Judge demos (no login): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report/judge">Judge Mode</a></li>
+<li>Live front door (no login): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report">Front door</a></li>
+<li>Demo video (plays inline): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4">Screen walkthrough, 2:17</a></li>
+</ul>
+</section>
+
+<footer>
+<p>Rankall video reports — submission docs · Representative: Nandish (founder) · Contributors: Nandish and Paras Pipalia · Prepared October 31, 2026, from real build and test evidence.</p>
+</footer>
+</div>
+</body>
+</html>

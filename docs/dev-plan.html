@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Development plan — Rankall video reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #F6F6FB; color: #44445a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 56px; }
+.eyebrow { color: #1B17FF; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+h1 { color: #0e0e2a; font-size: 32px; line-height: 1.15; margin: 8px 0 12px; }
+.summary { font-size: 18px; margin: 0 0 8px; }
+.card { background: #fff; border-radius: 16px; border-top: 4px solid #1B17FF; box-shadow: 0 1px 3px rgba(16,16,60,.08); padding: 24px; margin: 20px 0; }
+.card h2 { color: #0e0e2a; font-size: 22px; margin: 0 0 12px; }
+.card h3 { color: #0e0e2a; font-size: 18px; margin: 20px 0 8px; }
+.card p { margin: 0 0 12px; }
+.card ul, .card ol { margin: 0 0 12px; padding-left: 22px; }
+.card li { margin-bottom: 6px; }
+a { color: #1B17FF; }
+.callout { background: #eef0ff; border-left: 4px solid #1B17FF; border-radius: 8px; padding: 14px 16px; margin: 16px 0; }
+.callout p { margin: 0; }
+.table-wrap { overflow-x: auto; margin: 12px 0; }
+table { border-collapse: collapse; min-width: 680px; width: 100%; font-size: 15px; }
+th { background: #ececff; color: #0e0e2a; text-align: left; padding: 10px 12px; }
+td { padding: 10px 12px; border-bottom: 1px solid #e6e6f2; vertical-align: top; }
+td.ev { word-break: break-all; }
+.pass { display: inline-block; background: #e6f6ec; color: #137333; font-weight: 700; font-size: 13px; border-radius: 999px; padding: 2px 10px; }
+code { background: #f0f0fa; border-radius: 6px; padding: 1px 6px; font-size: .92em; word-break: break-all; }
+pre { background: #0e0e2a; color: #f2f2ff; border-radius: 12px; padding: 16px; overflow-x: auto; font-size: 14px; }
+footer { color: #77778c; font-size: 14px; margin-top: 28px; }
+@media (max-width: 480px) {
+  .wrap { padding: 20px 12px 40px; }
+  h1 { font-size: 26px; }
+  .card { padding: 18px 16px; }
+  table { font-size: 14px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="eyebrow">Rankall video reports — submission docs</p>
+<h1>Development plan</h1>
+<p class="summary">From a real AI-visibility scan to a personalized presenter video in one click — what was built during the hackathon window, in the order it was built, and what was deliberately cut or left out.</p>
+<p>This plan covers the Meta Global AI Developer Hackathon entry: a personalized video report generated from a real scan of a business's visibility across AI platforms. The entry is a working product, not a video file alone — judges can open the live preview without logging in, pick a pre-scanned business, and watch its video play instantly.</p>
+
+<section class="card">
+<h2>What existed before (not submission work)</h2>
+<p>The following existed before October 26 and are shown only as context. They are not claimed as hackathon work:</p>
+<ul>
+<li>The scan engine and platform scoring.</li>
+<li>Written reports and dashboards.</li>
+<li>Business pages. A business page appears only as a labeled secondary link on the delivery page ("this page already existed — the video is what's new"). No new business-page building happened during the window.</li>
+</ul>
+<p>The early scaffold from before the window is likewise not presented as hackathon work. Everything below was built during the window.</p>
+</section>
+
+<section class="card">
+<h2>What was built, in order</h2>
+
+<h3>1. Meta AI as the 12th scanned platform</h3>
+<p>Meta AI joined the scan as the 12th platform, live by default, via Meta's Model API (Muse Spark 1.3). New scans run 12 platforms. Scans from before Meta stay at their original count — nothing is backfilled. The October 8 Folsom demo still shows 7 of 11, with no Meta line, and that is correct, not an error.</p>
+
+<h3>2. Video pipeline core</h3>
+<p>The pipeline turns a real scan into a video: scan aggregates → script → director verification → narration → avatar render → delivery page. The script writer is Muse Spark 1.3. The director is an agent layer inside the pipeline: it chooses the wound angle (which loss to lead with), then reviews its own draft against the real scan data, rejecting weak hooks and overclaims before anything renders.</p>
+
+<h3>3. Delivery page, jobs dashboard, and front door</h3>
+<p>The delivery page shows the video, the business's real numbers, and one primary call to action: claim the full written report. A jobs dashboard lists video jobs and their states. A self-serve front door lets a visitor run a fresh scan and watch a video generate, with a Business / Person toggle over one shared scan pipeline. If a job fails, the page shows the failed stage and a retry — never a fake video.</p>
+
+<h3>4. Server-side hardening</h3>
+<p>The pipeline runs server-side so a browser close or a platform time limit cannot lose a render:</p>
+<ul>
+<li>A durable job store records every job and its checkpoints.</li>
+<li>A job checkpoints after every stage (input, script, director, narration asset, render start, render complete). A later poll resumes from the last checkpoint; a started render is only re-polled, never re-started.</li>
+<li>A stall past 10 minutes with no progress fails honestly with the failed stage.</li>
+<li>If the job store is unavailable, the preview answers with an honest service-unavailable response — it never silently falls back to in-memory storage.</li>
+<li>The live render path uses HeyGen v3 only, with ElevenLabs narration.</li>
+<li>A platform that fails during a scan is recorded as missing, never as zero.</li>
+<li>Cost capture reads the real wallet balance before and after each job, so the cost guard sees real spend.</li>
+</ul>
+
+<h3>5. Bounded script retries</h3>
+<p>When Spark returns empty content, the job stays processing and a later poll retries Spark — empty content only, maximum 3 attempts total — instead of falling back immediately. Proven live on October 28: two empty responses, then a Spark script on the third attempt; the job completed in 401 seconds for $2.17 (job <code>job_1793126697397_88e08dc1</code>). The retry logic was not weakened to make room for longer scripts.</p>
+
+<h3>6. Presenter and voice system</h3>
+<p>Presenters and voices are paired, and only listed presenters are accepted — anything else is rejected before any job or spend:</p>
+<div class="table-wrap"><table>
+<tr><th>Presenter</th><th>Voice</th></tr>
+<tr><td>Dante</td><td>Eric</td></tr>
+<tr><td>Julian</td><td>Eric</td></tr>
+<tr><td>Abigail</td><td>Bella</td></tr>
+<tr><td>Saoirse</td><td>Bella</td></tr>
+</table></div>
+
+<h3>7. Judge Mode growth</h3>
+<p>Judge Mode is the no-login demo: pick a pre-scanned real business and watch its video play instantly. It grew in three steps:</p>
+<ul>
+<li>It opened with 3 demo cards.</li>
+<li>It then added 7 cards, one per remaining segment at the time, from real scans.</li>
+<li>It then added a low-scorer card: a generic-category scan that resolved to a real dental business, score 2, mentioned on 2 of 11 platforms (October 8, 2026). That card's video is 46.92 seconds, 15,484,181 bytes.</li>
+<li>Finally, the Personal demo card was replaced in place by a Gantos Dental Group card (see Decisions below). The page holds 11 cards today.</li>
+</ul>
+<div class="callout"><p>Every demo video is labeled with its real run date as a previously completed real run — never presented as freshly generated. Judge videos are committed files in the public repo, because the render provider's signed links expire after about 7 days.</p></div>
+
+<h3>8. Screen walkthrough demo video</h3>
+<p>The submitted demo video is a screen walkthrough with narration (2 minutes 17 seconds), not an avatar-only clip. It walks the front door, a fresh scan, a real video-report clip, the director and Meta beats, and a business-page segment labeled pre-existing. It is hosted on the public preview so it plays inline without logging in (8,675,519 bytes, video/mp4).</p>
+
+<h3>9. Script pacing target</h3>
+<p>The script prompt now targets about 840 characters (about 167 words) of total narration, measured from a real video: 50.44 seconds from 700 characters is about 14 characters per second, so 840 characters lands near 60 seconds. This is a code change only. No render was run to prove the new length, and none is claimed — a proof render needs a separate go-ahead.</p>
+
+<h3>10. Submission docs (this bundle)</h3>
+<p>These four documents — development plan, technical plan, test plan, and test scenarios — were written from real build and test evidence for judges to read alongside the demo video and writeup.</p>
+</section>
+
+<section class="card">
+<h2>Decisions and cuts</h2>
+<ul>
+<li><strong>Faceless fallback cut.</strong> A projection-based rule (estimate a video's cost from its script length; over $2, route to an image-per-scene video instead of an avatar) was designed and then cut for the submission. Avatar videos measure $1.70–$2.17, and the image-per-scene path's own cost was never measured, so no cheaper figure could be honestly claimed. The avatar path is used always. The idea can return after the submission.</li>
+<li><strong>Pacing target set.</strong> The 840-character target above was set after the retry proof landed. The earlier design deliberately did not set it first, because longer scripts need more output tokens and Spark empties happen when reasoning eats the token budget.</li>
+<li><strong>Mistral account fix.</strong> Mistral returned a rate-limit error on every scan for weeks. The cause was account allowance exhaustion, not code: the account was upgraded and its access rotated. A verification scan on October 27 mentioned 12 of 12 platforms with Mistral succeeding (scan <code>8d85ebea-9c97-4100-aa26-a98f026c611b</code>), and a second verification scan on October 30 also mentioned Mistral (scan <code>5a014aea-5f46-4685-87f7-1154eee6bc1f</code>). No code fix is claimed for an account limit.</li>
+<li><strong>Judge-card swap.</strong> The Personal demo card's heading rendered the scan's tracked display name incorrectly, so the founder chose to replace it with a real company card instead of rewording it. The replacement is Gantos Dental Group (Naperville, dentist): score 2, mentioned on 0 of 11 platforms, run August 25, 2026 (scan <code>41fc6cf3-1e08-4667-b427-74d47d59869a</code>). The swap reused the video that already existed — no new scan, no new render, no spend. Consequence, stated plainly: with the Personal card gone, the 11 cards span 7 segments in substance (see the test plan's coverage note), and Gantos is the 5th dental card.</li>
+<li><strong>Open-weights review, designed but not wired.</strong> A script-review pass on an open-weights model was designed as one real pipeline step. It is not connected to the live pipeline and is described here as designed, never as running. Wiring it needs provider access that was not in place during the window.</li>
+<li><strong>Demo video choice.</strong> The screen walkthrough replaced the avatar-only demo as the submitted demo link, because it shows the real product (scan, video, numbers, claim) instead of only a presenter.</li>
+<li><strong>Product identification, prototype note only.</strong> A short labeled note on the Judge Mode page describes a prototype: checking whether Meta AI identifies a business's own product correctly, misidentifies it, or substitutes a competitor's product, with ads and organic recommendations never mixed. A surface with no permitted method is labeled "pending", never scored. Full cross-platform tracking is post-submission work, not a submission claim.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>What was deliberately not built</h2>
+<ul>
+<li>No second scoring system and no AI-overview system.</li>
+<li>No backfilling of new platforms onto old scans.</li>
+<li>No mock data in any demo content. Every demo video is a real scanned business.</li>
+<li>No pay-to-rank: scores come from real scans only.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Team</h2>
+<ul>
+<li>Representative: Nandish (founder, Rankall.io)</li>
+<li>Contributors: Nandish (founder, Representative) and Paras Pipalia — no other contributors.</li>
+</ul>
+</section>
+
+<section class="card">
+<h2>Links</h2>
+<ul>
+<li>Public repo: <a href="https://github.com/rankallstartup-cell/rankall-video-report">rankall-video-report</a></li>
+<li>Judge demos (no login): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report/judge">Judge Mode</a></li>
+<li>Live front door (no login): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report">Front door</a></li>
+<li>Demo video (plays inline): <a href="https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4">Screen walkthrough, 2:17</a></li>
+</ul>
+</section>
+
+<footer>
+<p>Rankall video reports — submission docs · Representative: Nandish (founder) · Contributors: Nandish and Paras Pipalia · Prepared October 31, 2026, from real build and test evidence.</p>
+</footer>
+</div>
+</body>
+</html>
