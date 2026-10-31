@@ -1,7 +1,7 @@
 # Rankall video reports — Meta Global AI Developer Hackathon entry
 
 A business scans its AI visibility on Rankall, and gets back a **personalized
-60-second video report** — a presenter who tells that business, from its own
+video report** — a presenter who tells that business, from its own
 real scan numbers, where AI recommends it and where competitors are taking
 its customers. Then one click claims the full written report.
 
@@ -30,7 +30,7 @@ New in-window work — this is the submission:
 - **Agentic director** — an agent layer inside the pipeline that reviews its
   own draft against the real scan JSON, rejects weak hooks and overclaims,
   and repairs them before rendering.
-- **Judge Mode** — 3 pre-scanned real businesses with instantly playing
+- **Judge Mode** — 11 pre-scanned real businesses with instantly playing
   videos, plus a visible Meta chain and on-page director report.
 - **Delivery page + jobs dashboard + self-serve front door** (Business /
   Person toggle, one shared scan pipeline).
