@@ -114,8 +114,8 @@ the Day 6 batch covers at least one video per tier.
   measured on real renders — above the <$1/video target; cost capture
   records real wallet-before/after spend per job, so the guard sees real
   numbers. The <$1 target is not met on v3; no cheaper figure is claimed.
-- Full server-side video, wall time: ~6.3 min (first complete run),
-  ~2.6 min (script-fix re-test). HeyGen render time dominates.
+- Full server-side video, wall time: 483s (first complete run),
+  401s (script-fix re-test). HeyGen render time dominates.
 - Day 6 batch: 8 videos, one per tier, $10.40 total (~$1.30/video
   average). All 8 used the flagged fallback (Spark empty on all 8) —
   that batch ran before the bounded retry existed.
