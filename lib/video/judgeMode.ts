@@ -20,10 +20,10 @@
 //     fallback script (Spark returned empty content; flagged, not hidden).
 //   Dentists of Folsom — Oct 8, 2026, score 35, mentioned 7 of 11,
 //     rule-based fallback script. The low-score demo: the wound is real.
-//   Tier expansion (RT-109, Oct 29, 2026): seven more demos, one per
-//     remaining tier, all rule-based fallback scripts (flagged on
-//     their delivery views via the stored job row, not hidden):
-//   Paras Pipalia (Personal) — Oct 7, 2026, score 17, mentioned 8 of 11.
+//   Tier expansion (RT-109, Oct 29, 2026): six more demos remain on the
+//     page (the seventh, Paras Pipalia, left via RT-125), all rule-based
+//     fallback scripts (flagged on their delivery views via the stored
+//     job row, not hidden):
 //   Topo Designs (Product) — Oct 28, 2026, score 41, mentioned 8 of 12.
 //   SV & Co (Agency) — Oct 7, 2026, score 0, mentioned 0 of 11.
 //   Acumatica (Enterprise) — Oct 28, 2026, score 30, mentioned 6 of 12.
@@ -38,6 +38,13 @@
 //     mentioned 2 of 11 (Claude + DeepSeek), Abigail + Bella presenter,
 //     founder-confirmed. Distinct from the Oct 27 Kinsler 85 card above:
 //     a different scan, never an overwrite of it.
+//   Card swap (RT-125, Oct 31, 2026): the Paras Personal demo leaves
+//     the page and a Gantos Dental Group card takes its place, using
+//     the existing video (no new scan, no new render, no new spend),
+//     rule-based fallback script (flagged on its delivery view via the
+//     stored job row, not hidden):
+//   Gantos Dental Group — Aug 25, 2026, score 2, mentioned 0 of 11,
+//     Julian + Eric presenter, founder-confirmed.
 
 export interface JudgeDemo {
   scanId: string;
@@ -64,9 +71,9 @@ export const JUDGE_DEMOS: JudgeDemo[] = [
     runLabel: 'Previously completed real run — Oct 8, 2026',
   },
   {
-    scanId: 'eb3ed289-7cfb-47a6-b0c4-7ef40667273b',
-    videoPath: '/judge-videos/paras.mp4',
-    runLabel: 'Previously completed real run — Oct 7, 2026',
+    scanId: '41fc6cf3-1e08-4667-b427-74d47d59869a',
+    videoPath: '/judge-videos/gantos.mp4',
+    runLabel: 'Previously completed real run — Aug 25, 2026',
   },
   {
     scanId: 'a8bda6dc-51f0-44b6-af30-63b562856453',

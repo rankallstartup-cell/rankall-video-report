@@ -41,9 +41,8 @@ describe('judge demos', () => {
     expect(getJudgeDemo('cd149a50-d824-46ee-aab3-27fd465a225c')?.runLabel).toContain('Oct 8, 2026');
   });
 
-  it('covers the 7 tier-expansion demos (RT-109) with their verified run dates', () => {
+  it('covers the remaining tier-expansion demos (RT-109) after the RT-125 swap', () => {
     const expected: Array<[string, string, string]> = [
-      ['eb3ed289-7cfb-47a6-b0c4-7ef40667273b', '/judge-videos/paras.mp4', 'Oct 7, 2026'],
       ['a8bda6dc-51f0-44b6-af30-63b562856453', '/judge-videos/topo.mp4', 'Oct 28, 2026'],
       ['3923d3a8-5794-4913-9caf-fe36f25dadd8', '/judge-videos/sv-co.mp4', 'Oct 7, 2026'],
       ['26474355-ec64-4c70-bdb4-90bc27f0052f', '/judge-videos/acumatica.mp4', 'Oct 28, 2026'],
@@ -64,6 +63,15 @@ describe('judge demos', () => {
     expect(low?.runLabel).toContain('Oct 8, 2026');
     // The Oct 27 Kinsler 85 card is untouched: different scan, different file.
     expect(getJudgeDemo('c651634a-9ad0-4823-9f4e-3d42ab4ef3be')?.videoPath).toBe('/judge-videos/kinsler.mp4');
+  });
+
+  it('swaps the Paras demo for the Gantos demo (RT-125)', () => {
+    // Paras is fully gone: no entry, no scan reference, no video reference.
+    expect(getJudgeDemo('eb3ed289-7cfb-47a6-b0c4-7ef40667273b')).toBeNull();
+    expect(JUDGE_DEMOS.some((d) => d.videoPath === '/judge-videos/paras.mp4')).toBe(false);
+    const gantos = getJudgeDemo('41fc6cf3-1e08-4667-b427-74d47d59869a');
+    expect(gantos?.videoPath).toBe('/judge-videos/gantos.mp4');
+    expect(gantos?.runLabel).toContain('Aug 25, 2026');
   });
 
   it('returns null for unknown scans', () => {
