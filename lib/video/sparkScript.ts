@@ -15,6 +15,15 @@ const execFileAsync = promisify(execFile);
 
 export const SPARK_MODEL = 'muse-spark-1.3';
 export const SPARK_MAX_TOKENS = 4000;
+/**
+ * RT-126 (Day 7 pacing): the script prompt's total-narration target, per
+ * the measured pacing (50.44s from 700 characters). Exact value in code;
+ * no tolerance band is set for "about" (OQ-RT126-1 decided by main: the
+ * code check is this exact prompt value, and rendered-length tolerance
+ * is parked with the unapproved proof render).
+ */
+export const SPARK_SCRIPT_PROMPT_TARGET =
+  'Target about 840 characters (about 167 words) of total narration.';
 const SPARK_API_URL = 'https://api.meta.ai/v1/chat/completions';
 const MM_PY =
   process.env.MM_PY_PATH ??
@@ -69,6 +78,7 @@ function buildPromptWithIssues(input: ScanVideoInput, repairIssues: string[]): s
     'Write a 60-second wound-first video script for a personalized AI-visibility video report.',
     'Structure: a hook (the invisible loss), 2–3 findings (their mentions vs competitors), one CTA (free report).',
     'Each section has an id, a short onScreenText headline, and narration of 25–40 words.',
+    SPARK_SCRIPT_PROMPT_TARGET,
     'DATA HONESTY — these rules are absolute:',
     '- Use ONLY numbers that appear in the scan data below. Never invent a count, score, rating, or rank.',
     '- Never write "zero", "never", "nobody", or "no one" unless the data shows zero mentions.',
