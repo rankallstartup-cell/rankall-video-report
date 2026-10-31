@@ -12,7 +12,7 @@ its customers. Then one click claims the full written report.
 - **Live front door** — run a fresh scan and watch a video generate:
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report
 - **Demo video (screen walkthrough v3, 2:17, founder-approved Oct 27)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4 (front door, fresh scan, real video-report clip, director + Meta beats, business-page segment labeled pre-existing).
-- **Submission docs** — development plan, technical plan, test plan, and test scenarios: [docs/dev-plan.md](docs/dev-plan.md), [docs/technical-plan.md](docs/technical-plan.md), [docs/test-plan.md](docs/test-plan.md), [docs/test-scenarios.md](docs/test-scenarios.md).
+- **Technical & Validation Documentation** — development plan, technical plan, test plan, and test scenarios, in one package: [docs/technical-validation-documentation.md](docs/technical-validation-documentation.md).
 
 Every demo video on the judge page is labeled with its real run date as a
 **previously completed real run** — never presented as freshly generated.

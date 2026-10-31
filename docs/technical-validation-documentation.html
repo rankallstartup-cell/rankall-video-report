@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Technical &amp; Validation Documentation — Rankall video reports</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; }
+body { margin: 0; background: #F6F6FB; color: #44445a; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; }
+.wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 56px; }
+.eyebrow { color: #1B17FF; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; }
+h1 { color: #0e0e2a; font-size: 32px; line-height: 1.15; margin: 8px 0 12px; }
+.summary { font-size: 18px; margin: 0 0 8px; }
+.card { background: #fff; border-radius: 16px; border-top: 4px solid #1B17FF; box-shadow: 0 1px 3px rgba(16,16,60,.08); padding: 24px; margin: 20px 0; }
+.card h2 { color: #0e0e2a; font-size: 22px; margin: 0 0 12px; }
+.card p { margin: 0 0 12px; }
+.card ul { margin: 0 0 12px; padding-left: 22px; }
+.card li { margin-bottom: 6px; }
+a { color: #1B17FF; }
+footer { color: #77778c; font-size: 14px; margin-top: 28px; }
+@media (max-width: 480px) {
+  .wrap { padding: 20px 12px 40px; }
+  h1 { font-size: 26px; }
+  .card { padding: 18px 16px; }
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+<p class="eyebrow">Rankall video reports — submission docs</p>
+<h1>Technical &amp; Validation Documentation</h1>
+<p class="summary">The submission's technical and validation documents, in one package: how the video-report entry was built, how it works, how it was tested, and the real cases that prove it. The four documents below are the complete package.</p>
+
+<section class="card">
+<h2>The four documents</h2>
+<ul>
+<li><strong>Development plan</strong> (<a href="dev-plan.md">markdown</a> · <a href="dev-plan.html">styled page</a>) — what was built during the hackathon window, in the order it was built, and what was deliberately cut or left out.</li>
+<li><strong>Technical plan</strong> (<a href="technical-plan.md">markdown</a> · <a href="technical-plan.html">styled page</a>) — how a real scan becomes a presenter video: the pipeline stages, the job store that survives interruptions, the honesty rules the video can never break, and the measured cost and limits.</li>
+<li><strong>Test plan</strong> (<a href="test-plan.md">markdown</a> · <a href="test-plan.html">styled page</a>) — how the entry was tested, layer by layer in order, what each layer covered, and what was honestly left parked.</li>
+<li><strong>Test scenarios</strong> (<a href="test-scenarios.md">markdown</a> · <a href="test-scenarios.html">styled page</a>) — a curated set of 22 real cases, each with what was expected, what actually happened, the result, and the evidence.</li>
+</ul>
+<p>Each document is available as markdown and as a styled page.</p>
+</section>
+
+<footer>Rankall video reports — Meta Global AI Developer Hackathon entry.</footer>
+</div>
+</body>
+</html>
