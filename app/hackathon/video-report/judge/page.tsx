@@ -119,6 +119,9 @@ export default async function JudgeModePage() {
         <h1 style={{ fontSize: 32, fontWeight: 800, margin: '0 0 8px', lineHeight: 1.15 }}>
           Pick a business. Watch its video.
         </h1>
+        <p style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.5, margin: '0 0 24px' }}>
+          Most of these businesses score under 45 — that&apos;s the wound Rankall shows, from their own real scans.
+        </p>
         <p style={{ fontSize: 18, lineHeight: 1.5, margin: '0 0 24px', color: GRAY }}>
           No login, no waiting on a scan. Each video below is a previously completed real run —
           labeled with its real date, never presented as freshly generated. Tap one and it plays.
