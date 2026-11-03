@@ -10,6 +10,12 @@
 // The business names, scores, and platform counts below come from the
 // real scan rows (service-role read, same as the delivery page) — the
 // helper only maps scanId → video file + run label, never numbers.
+//
+// Nov 2, 2026 (post-submission judge clarity): a HOW IT WORKS strip above
+// the cards — the 30-second story plus the visible Meta chain — and a link
+// to Tech Ridge Dental's delivery page, where its stored completed job
+// renders the How this video was made steps. Text only: no new renders,
+// no HeyGen spend, no card changes.
 
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -108,6 +114,11 @@ export default async function JudgeModePage() {
     marginBottom: 16,
   };
 
+  // Chain-evidence link target: Tech Ridge Dental's card, whose stored
+  // completed job (Spark script) renders How this video was made steps on
+  // its delivery page. Omitted silently if the card failed to load.
+  const techRidgeCard = cards.find((c) => c.demo.scanId === '637968a3-2952-4793-9073-35918b5f4ff9');
+
   return (
     <main style={{ minHeight: '100vh', background: BG, color: NAVY, fontFamily: 'sans-serif', padding: '24px 20px 60px' }}>
       <div style={{ maxWidth: 680, margin: '0 auto' }}>
@@ -126,6 +137,30 @@ export default async function JudgeModePage() {
           No login, no waiting on a scan. Each video below is a previously completed real run —
           labeled with its real date, never presented as freshly generated. Tap one and it plays.
         </p>
+
+        {/* HOW IT WORKS — 30-second strip + visible Meta chain (Nov 2, post-submission
+            judge clarity; text only, no renders, no spend). */}
+        <div style={card}>
+          <p style={{ color: BLUE, fontSize: 13, fontWeight: 700, margin: '0 0 12px', letterSpacing: 0.5 }}>
+            HOW IT WORKS — IN 30 SECONDS
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.5, margin: '0 0 12px' }}>
+            <strong>1. Real scan.</strong> Rankall checks the business across 12 AI platforms, including Meta AI.{' '}
+            <strong>2. Director check.</strong> Every number in the video is verified against the real scan before it renders.{' '}
+            <strong>3. Video report.</strong> A presenter tells the business where AI recommends it — and where competitors take its customers.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.5, margin: '0 0 12px', color: GRAY }}>
+            How each video is made: real scan → Muse Spark script (Meta&apos;s Model API) → director verifies every number → voice + avatar render.
+          </p>
+          {techRidgeCard && (
+            <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>
+              <a href={techRidgeCard.watchUrl} style={{ color: BLUE, fontWeight: 700 }}>
+                See the checks behind one video
+              </a>
+              <span style={{ color: GRAY }}> — Tech Ridge Dental&apos;s page shows its How this video was made steps.</span>
+            </p>
+          )}
+        </div>
 
         {cards.length === 0 && (
           <div style={card}>
