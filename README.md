@@ -7,15 +7,25 @@ video report** — a presenter who tells that business, from its own
 real scan numbers, where AI recommends it and where competitors are taking
 its customers. Then one click claims the full written report.
 
-## Try it (no login)
+## Submission files (hackathon-specific)
 
 - **Judge demos** — pick a business, watch its video in under 30 seconds:
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report/judge
+- **Demo video (screen walkthrough v4, ~87s)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v4.mp4 (avatar opening, fresh scan, video-report clip, Meta + Director evidence, pre-existing note).
+- **Submission writeup + packet** (markdown and Rankall-themed HTML): [docs/submission-writeup.md](docs/submission-writeup.md) ([HTML](docs/submission-writeup.html)), [docs/submission-packet.md](docs/submission-packet.md) ([HTML](docs/submission-packet.html)).
+- **Technical & validation package** — development plan, technical plan, test plan, and test scenarios: [docs/technical-validation-documentation.md](docs/technical-validation-documentation.md).
+- **Hackathon code** — `app/hackathon/video-report/` (front door, Judge Mode, delivery page, jobs dashboard), `lib/video/` (pipeline, Spark script, director, providers), `public/judge-videos/` (the 11 demo videos), `assets/` (the charts below).
+
+Everything else in this repo is the pre-existing Rankall app, included so the
+submission runs. The split is explicit: scan engine, platform scoring,
+reports, dashboards, and business pages predate the window; the video
+pipeline, Judge Mode, delivery page, and Meta integration are the
+in-window build.
+
+## Try it (no login)
+
 - **Live front door** — run a fresh scan and watch a video generate:
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report
-- **Demo video (screen walkthrough v3, 2:17, founder-approved Oct 27)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4 (front door, fresh scan, real video-report clip, director + Meta beats, business-page segment labeled pre-existing).
-- **Technical & Validation Documentation** — development plan, technical plan, test plan, and test scenarios, in one package: [docs/technical-validation-documentation.md](docs/technical-validation-documentation.md).
-- **Submission documents** — the signed-off submission writeup and the submission packet, in markdown and Rankall-themed HTML: [docs/submission-writeup.md](docs/submission-writeup.md) ([HTML](docs/submission-writeup.html)), [docs/submission-packet.md](docs/submission-packet.md) ([HTML](docs/submission-packet.html)).
 
 Every demo video on the judge page is labeled with its real run date as a
 **previously completed real run** — never presented as freshly generated.
@@ -41,8 +51,6 @@ from their own real scans.
 
 ## What was built during the hackathon (Oct 26 – Nov 4, 2026)
 
-New in-window work — this is the submission:
-
 - **Video pipeline** — scan aggregates → script → director verification →
   narration → avatar render → delivery page, with a durable job store and
   checkpoint/resume so a 60-second serverless limit never loses a render.
@@ -54,7 +62,8 @@ New in-window work — this is the submission:
   own draft against the real scan JSON, rejects weak hooks and overclaims,
   and repairs them before rendering.
 - **Judge Mode** — 11 pre-scanned real businesses with instantly playing
-  videos, plus a visible Meta chain and on-page director report.
+  videos, a visible Meta chain, and an on-page director report. Cards lead
+  with the low scorers; the two 85s sit last as proof.
 - **Delivery page + jobs dashboard + self-serve front door** (Business /
   Person toggle, one shared scan pipeline).
 - **Bounded cross-invocation script retries** — when Spark returns empty
@@ -65,29 +74,19 @@ New in-window work — this is the submission:
 ## Pre-existing (NOT hackathon work)
 
 The scan engine, platform scoring, reports, dashboards, and business pages
-existed before Oct 26 and are shown only as context. The business page
-appears solely as a labeled secondary link ("this page already existed —
-the video is what's new"). No new business-page building happened during
-the window.
+existed before Oct 26 and appear only as context — the business page as a
+labeled secondary link on the delivery page. No new business-page building
+happened during the window.
 
 ## Product identification — prototype (in-window design note)
 
 Muse (Meta AI) doesn't just recommend businesses — it identifies
-products. The prototype asks, in plain words: does it identify YOUR
-product correctly, misidentify it, or substitute a competitor's product —
-and does it appear in an ad or an organic recommendation? Ads and organic
-are never mixed. How the check works, in plain words: the seller's own
-feed/catalog comes first; the Meta Model API prototype is labeled as an
-API model, not consumer Muse; an official catalog is used where one
-applies. Future coverage is per-platform — Amazon, Shopify, eBay,
-Marketplace, TikTok, Walmart, and others — but full cross-platform
-tracking is post-Nov 4 build-phase work, not a submission claim. A
-surface with no permitted method yet is labeled "pending", never scored,
-and no product data is invented. The Judge Mode page carries a short
-labeled prototype note (Product-tier pipeline proof: Dyson); the demo
-hero stays the low scorer. Pre-existing vs in-window split stays
-explicit: scan engine = pre-existing, video pipeline + this prototype
-note = in-window.
+products. The prototype asks whether it identifies YOUR product correctly,
+misidentifies it, or substitutes a competitor's product, in an ad or an
+organic recommendation (never mixed). The seller's own feed/catalog comes
+first; a surface with no permitted method yet is labeled "pending", never
+scored, and no product data is invented. Full cross-platform tracking is
+post-Nov 4 build-phase work, not a submission claim.
 
 ## Honesty layer (what the video will never do)
 
@@ -100,21 +99,24 @@ note = in-window.
 - A platform that fails a scan is recorded as missing, never zero.
 - No mock data anywhere in demo content. Test fixtures are labeled.
 
-## The 12 platforms, all 8 tiers
+## The 12 platforms, and tier coverage
 
 Platforms: ChatGPT, Gemini, Google AI, Copilot, Perplexity, Grok, Claude,
 DeepSeek, Mistral, Kimi, Groq, Meta AI (12th, new in-window).
 
-Tiers: Local, Personal, Product, Agency, Enterprise, Government, SEO,
-Global Brand Intelligence. The front door and dashboard are tier-agnostic;
-the Day 6 batch covers at least one video per tier.
+Day 6 batch: one video per tier across all 8 tiers (Local, Personal,
+Product, Agency, Enterprise, Government, SEO, Global Brand Intelligence).
+Judge page: 11 businesses across 7 segments (the Personal card left the
+page; the batch video remains part of the batch record).
 
 ## Measured numbers (no estimates presented as measurements)
 
 - HeyGen v3 render: **~$2.02–2.13 per ~55s video (~$0.038/s)**,
   measured on real renders — above the <$1/video target; cost capture
   records real wallet-before/after spend per job, so the guard sees real
-  numbers. Clarification (Nov 2): the technical plan's $1.70–$2.17 range is the observed range across clean sequential runs (45–60 s); $2.02–$2.13 is the ~52–56 s subset of that range (Kinsler 52.4 s, Tech Ridge 55.8 s) at the same rate — both measured, no contradiction. The <$1 target is not met on v3; no cheaper figure is claimed.
+  numbers. The technical plan's $1.70–$2.17 range covers clean sequential
+  runs (45–60 s); $2.02–$2.13 is the ~52–56 s subset at the same rate.
+  The <$1 target is not met on v3; no cheaper figure is claimed.
 - Full server-side video, wall time: 483s (first complete run),
   401s (script-fix re-test). HeyGen render time dominates.
 - Day 6 batch: 8 videos, one per tier, $10.40 total (~$1.30/video
@@ -125,10 +127,10 @@ the Day 6 batch covers at least one video per tier.
 
 ## Open gaps (disclosed honestly)
 
-- **Mistral**: RESOLVED Oct 27 — the weeks-long 429 was Free-plan exhaustion, not code. Account upgraded to Pro, key rotated, and the preview gate scan of Oct 27 20:59 CDT (scanId `8d85ebea-9c97-4100-aa26-a98f026c611b`) mentioned 12/12 platforms with Mistral AND Kimi both succeeding. No code fix is claimed for an account limit; the account fix is what closed the gate.
+- **Mistral**: RESOLVED Oct 27 — the weeks-long 429 was Free-plan exhaustion, not code. Account upgraded to Pro, key rotated, and the preview gate scan of Oct 27 20:59 CDT (scanId `8d85ebea-9c97-4100-aa26-a98f026c611b`) mentioned 12/12 platforms with Mistral AND Kimi both succeeding. No code fix is claimed for an account limit.
 - **Kimi**: fixed in-window — empty-content retries escalate the token
   budget 300 → 1000 (reasoning is ~1,500 characters); verified live.
-- **Demo video**: screen walkthrough v3, 2:17, founder-approved Oct 27; https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4.
+- **Demo video**: screen walkthrough v4, ~87s; https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v4.mp4.
 
 ## Run it locally
 

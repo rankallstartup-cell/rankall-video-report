@@ -55,6 +55,55 @@ export interface JudgeDemo {
 }
 
 export const JUDGE_DEMOS: JudgeDemo[] = [
+  // Order (Nov 3, 2026, judge-clarity): hero first, then lows ascending,
+  // then the two 85s last as proof — pain first, proof after. The strip
+  // and proof card find Tech Ridge by scanId, so this order never breaks
+  // the evidence links.
+  {
+    scanId: 'cd149a50-d824-46ee-aab3-27fd465a225c',
+    videoPath: '/judge-videos/folsom.mp4',
+    runLabel: 'Previously completed real run — Oct 8, 2026',
+  },
+  {
+    scanId: '3923d3a8-5794-4913-9caf-fe36f25dadd8',
+    videoPath: '/judge-videos/sv-co.mp4',
+    runLabel: 'Previously completed real run — Oct 7, 2026',
+  },
+  {
+    scanId: '41fc6cf3-1e08-4667-b427-74d47d59869a',
+    videoPath: '/judge-videos/gantos.mp4',
+    runLabel: 'Previously completed real run — Aug 25, 2026',
+  },
+  {
+    scanId: 'c617690f-d8d9-477d-9333-f59ef99b48dd',
+    videoPath: '/judge-videos/victorious.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '2f5d9bbe-126d-41ca-81db-5568453fb610',
+    videoPath: '/judge-videos/kinsler-abigail-bella.mp4',
+    runLabel: 'Previously completed real run — Oct 8, 2026',
+  },
+  {
+    scanId: '8275ed3c-41c2-41e8-a202-544891eca315',
+    videoPath: '/judge-videos/marfa.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '26474355-ec64-4c70-bdb4-90bc27f0052f',
+    videoPath: '/judge-videos/acumatica.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: 'a8bda6dc-51f0-44b6-af30-63b562856453',
+    videoPath: '/judge-videos/topo.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
+  {
+    scanId: '5e252b03-1fdc-4928-822a-a4d4a94217aa',
+    videoPath: '/judge-videos/stumptown.mp4',
+    runLabel: 'Previously completed real run — Oct 28, 2026',
+  },
   {
     scanId: '637968a3-2952-4793-9073-35918b5f4ff9',
     videoPath: '/judge-videos/tech-ridge.mp4',
@@ -64,51 +113,6 @@ export const JUDGE_DEMOS: JudgeDemo[] = [
     scanId: 'c651634a-9ad0-4823-9f4e-3d42ab4ef3be',
     videoPath: '/judge-videos/kinsler.mp4',
     runLabel: 'Previously completed real run — Oct 27, 2026',
-  },
-  {
-    scanId: 'cd149a50-d824-46ee-aab3-27fd465a225c',
-    videoPath: '/judge-videos/folsom.mp4',
-    runLabel: 'Previously completed real run — Oct 8, 2026',
-  },
-  {
-    scanId: '41fc6cf3-1e08-4667-b427-74d47d59869a',
-    videoPath: '/judge-videos/gantos.mp4',
-    runLabel: 'Previously completed real run — Aug 25, 2026',
-  },
-  {
-    scanId: 'a8bda6dc-51f0-44b6-af30-63b562856453',
-    videoPath: '/judge-videos/topo.mp4',
-    runLabel: 'Previously completed real run — Oct 28, 2026',
-  },
-  {
-    scanId: '3923d3a8-5794-4913-9caf-fe36f25dadd8',
-    videoPath: '/judge-videos/sv-co.mp4',
-    runLabel: 'Previously completed real run — Oct 7, 2026',
-  },
-  {
-    scanId: '26474355-ec64-4c70-bdb4-90bc27f0052f',
-    videoPath: '/judge-videos/acumatica.mp4',
-    runLabel: 'Previously completed real run — Oct 28, 2026',
-  },
-  {
-    scanId: '8275ed3c-41c2-41e8-a202-544891eca315',
-    videoPath: '/judge-videos/marfa.mp4',
-    runLabel: 'Previously completed real run — Oct 28, 2026',
-  },
-  {
-    scanId: 'c617690f-d8d9-477d-9333-f59ef99b48dd',
-    videoPath: '/judge-videos/victorious.mp4',
-    runLabel: 'Previously completed real run — Oct 28, 2026',
-  },
-  {
-    scanId: '5e252b03-1fdc-4928-822a-a4d4a94217aa',
-    videoPath: '/judge-videos/stumptown.mp4',
-    runLabel: 'Previously completed real run — Oct 28, 2026',
-  },
-  {
-    scanId: '2f5d9bbe-126d-41ca-81db-5568453fb610',
-    videoPath: '/judge-videos/kinsler-abigail-bella.mp4',
-    runLabel: 'Previously completed real run — Oct 8, 2026',
   },
 ];
 
