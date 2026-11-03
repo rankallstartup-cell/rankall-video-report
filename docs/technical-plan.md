@@ -79,6 +79,8 @@ Cost method: the render provider's API returns no per-video charge, only a walle
 - The Day 6 batch total ($10.40 for 8 videos) is real spend, but $10.40 ÷ 8 = $1.30 per video is an accounting artifact, not a unit cost: the batch ran with an auto-reload landing mid-batch and overlapping jobs. Never quote $1.30 as a per-video cost.
 - The sub-$1 per video target is not met on v3 at useful length: at about $0.038 per second, $1 buys about 26 seconds of video, which cannot carry the pain, the real numbers, the director evidence, and the call to action. The honest position is about $2 per video; sub-$1 is post-submission work (a cheaper engine or a different format), not a submission claim.
 
+Cross-reference (Nov 2): the submission packet and README cite ~$2.02–$2.13 per ~55 s video; that is the ~52–56 s subset of the $1.70–$2.17 range above (Kinsler 52.4 s, Tech Ridge 55.8 s) at the same ~$0.038/s rate — a narrower slice of the same measurements, not a different figure.
+
 ## Limits and failure behavior
 
 | Situation | Behavior |

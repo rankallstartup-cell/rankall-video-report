@@ -13,6 +13,7 @@ its customers. Then one click claims the full written report.
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report
 - **Demo video (screen walkthrough v3, 2:17, founder-approved Oct 27)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4 (front door, fresh scan, real video-report clip, director + Meta beats, business-page segment labeled pre-existing).
 - **Technical & Validation Documentation** — development plan, technical plan, test plan, and test scenarios, in one package: [docs/technical-validation-documentation.md](docs/technical-validation-documentation.md).
+- **Submission documents** — the signed-off submission writeup and the submission packet: [docs/submission-writeup.md](docs/submission-writeup.md), [docs/submission-packet.md](docs/submission-packet.md).
 
 Every demo video on the judge page is labeled with its real run date as a
 **previously completed real run** — never presented as freshly generated.
@@ -111,10 +112,10 @@ the Day 6 batch covers at least one video per tier.
 
 ## Measured numbers (no estimates presented as measurements)
 
-- HeyGen v3 render: **~$2.02–2.13 per ~55s video (~$0.038–0.039/s)**,
+- HeyGen v3 render: **~$2.02–2.13 per ~55s video (~$0.038/s)**,
   measured on real renders — above the <$1/video target; cost capture
   records real wallet-before/after spend per job, so the guard sees real
-  numbers. The <$1 target is not met on v3; no cheaper figure is claimed.
+  numbers. Clarification (Nov 2): the technical plan's $1.70–$2.17 range is the observed range across clean sequential runs (45–60 s); $2.02–$2.13 is the ~52–56 s subset of that range (Kinsler 52.4 s, Tech Ridge 55.8 s) at the same rate — both measured, no contradiction. The <$1 target is not met on v3; no cheaper figure is claimed.
 - Full server-side video, wall time: 483s (first complete run),
   401s (script-fix re-test). HeyGen render time dominates.
 - Day 6 batch: 8 videos, one per tier, $10.40 total (~$1.30/video
