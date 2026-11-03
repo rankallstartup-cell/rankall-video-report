@@ -13,7 +13,7 @@ its customers. Then one click claims the full written report.
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report
 - **Demo video (screen walkthrough v3, 2:17, founder-approved Oct 27)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v3.mp4 (front door, fresh scan, real video-report clip, director + Meta beats, business-page segment labeled pre-existing).
 - **Technical & Validation Documentation** — development plan, technical plan, test plan, and test scenarios, in one package: [docs/technical-validation-documentation.md](docs/technical-validation-documentation.md).
-- **Submission documents** — the signed-off submission writeup and the submission packet: [docs/submission-writeup.md](docs/submission-writeup.md), [docs/submission-packet.md](docs/submission-packet.md).
+- **Submission documents** — the signed-off submission writeup and the submission packet, in markdown and Rankall-themed HTML: [docs/submission-writeup.md](docs/submission-writeup.md) ([HTML](docs/submission-writeup.html)), [docs/submission-packet.md](docs/submission-packet.md) ([HTML](docs/submission-packet.html)).
 
 Every demo video on the judge page is labeled with its real run date as a
 **previously completed real run** — never presented as freshly generated.
