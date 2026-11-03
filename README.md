@@ -11,7 +11,7 @@ its customers. Then one click claims the full written report.
 
 - **Judge demos** — pick a business, watch its video in under 30 seconds:
   https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/hackathon/video-report/judge
-- **Demo video (screen walkthrough v4, ~87s)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v4.mp4 (avatar opening, fresh scan, video-report clip, Meta + Director evidence, pre-existing note).
+- **Demo video (screen walkthrough v5, ~90s)** — https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v5.mp4 (avatar opening, fresh scan, video-report clip, Meta + Director evidence, pre-existing note).
 - **Submission writeup + packet** (markdown and Rankall-themed HTML): [docs/submission-writeup.md](docs/submission-writeup.md) ([HTML](docs/submission-writeup.html)), [docs/submission-packet.md](docs/submission-packet.md) ([HTML](docs/submission-packet.html)).
 - **Technical & validation package** — development plan, technical plan, test plan, and test scenarios: [docs/technical-validation-documentation.md](docs/technical-validation-documentation.md).
 - **Hackathon code** — `app/hackathon/video-report/` (front door, Judge Mode, delivery page, jobs dashboard), `lib/video/` (pipeline, Spark script, director, providers), `public/judge-videos/` (the 11 demo videos), `assets/` (the charts below).
@@ -130,7 +130,7 @@ page; the batch video remains part of the batch record).
 - **Mistral**: RESOLVED Oct 27 — the weeks-long 429 was Free-plan exhaustion, not code. Account upgraded to Pro, key rotated, and the preview gate scan of Oct 27 20:59 CDT (scanId `8d85ebea-9c97-4100-aa26-a98f026c611b`) mentioned 12/12 platforms with Mistral AND Kimi both succeeding. No code fix is claimed for an account limit.
 - **Kimi**: fixed in-window — empty-content retries escalate the token
   budget 300 → 1000 (reasoning is ~1,500 characters); verified live.
-- **Demo video**: screen walkthrough v4, ~87s; https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v4.mp4.
+- **Demo video**: screen walkthrough v5, ~90s; https://rankall-git-hackathon-video-report-nandish-patel-s-projects.vercel.app/demo-walkthrough-v5.mp4.
 
 ## Run it locally
 
