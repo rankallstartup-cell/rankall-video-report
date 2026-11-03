@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="560" viewBox="0 0 1000 560" font-family="Helvetica, Arial, sans-serif">
+  <rect x="2" y="2" width="996" height="556" rx="16" fill="#FFFFFF" stroke="#E2E2F0"/>
+  <text x="40" y="48" font-size="13" letter-spacing="2" fill="#5B5B7A">THE WOUND &#183; 11 JUDGE-PAGE BUSINESSES &#183; REAL SCORES</text>
+  <text x="40" y="80" font-size="30" font-weight="bold" fill="#0E0E2A">9 of 11 score under 45.</text>
+  <line x1="555" y1="100" x2="555" y2="498" stroke="#C9C9E0" stroke-dasharray="5 5"/>
+  <text x="555" y="112" font-size="13" fill="#5B5B7A" text-anchor="middle">45</text>
+  <g font-size="15">
+    <text x="40" y="140" fill="#0E0E2A">SV &amp; Co</text><text x="252" y="140" fill="#0E0E2A">0</text>
+    <text x="40" y="178" fill="#0E0E2A">Gantos Dental</text><rect x="240" y="164" width="14" height="16" rx="3" fill="#1B17FF"/><text x="262" y="178" fill="#0E0E2A">2</text>
+    <text x="40" y="216" fill="#0E0E2A">Kinsler (generic)</text><rect x="240" y="202" width="14" height="16" rx="3" fill="#1B17FF"/><text x="262" y="216" fill="#0E0E2A">2</text>
+    <text x="40" y="254" fill="#0E0E2A">Victorious</text><rect x="240" y="240" width="14" height="16" rx="3" fill="#1B17FF"/><text x="262" y="254" fill="#0E0E2A">2</text>
+    <text x="40" y="292" fill="#0E0E2A">City of Marfa</text><rect x="240" y="278" width="56" height="16" rx="3" fill="#1B17FF"/><text x="304" y="292" fill="#0E0E2A">8</text>
+    <text x="40" y="330" fill="#0E0E2A">Acumatica</text><rect x="240" y="316" width="210" height="16" rx="3" fill="#1B17FF"/><text x="458" y="330" fill="#0E0E2A">30</text>
+    <text x="40" y="368" fill="#0E0E2A">Dentists of Folsom</text><rect x="240" y="354" width="245" height="16" rx="3" fill="#1B17FF"/><text x="493" y="368" fill="#0E0E2A">35</text>
+    <text x="40" y="406" fill="#0E0E2A">Topo Designs</text><rect x="240" y="392" width="287" height="16" rx="3" fill="#1B17FF"/><text x="535" y="406" fill="#0E0E2A">41</text>
+    <text x="40" y="444" fill="#0E0E2A">Stumptown Coffee</text><rect x="240" y="430" width="294" height="16" rx="3" fill="#1B17FF"/><text x="542" y="444" fill="#0E0E2A">42</text>
+    <text x="40" y="482" fill="#0E0E2A">Tech Ridge Dental</text><rect x="240" y="468" width="595" height="16" rx="3" fill="#B9B9D6"/><text x="843" y="482" fill="#0E0E2A">85</text>
+    <text x="40" y="520" fill="#0E0E2A">Kinsler Family</text><rect x="240" y="506" width="595" height="16" rx="3" fill="#B9B9D6"/><text x="843" y="520" fill="#0E0E2A">85</text>
+  </g>
+  <text x="40" y="550" font-size="13" fill="#5B5B7A">Scores from each business&#8217;s real scan. Pre-Meta scans keep their original 11-platform count.</text>
+</svg>

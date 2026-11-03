@@ -1,4 +1,6 @@
-# Rankall video reports — Meta Global AI Developer Hackathon entry
+![Rankall video reports — scan in, video report out](assets/hero.svg)
+
+> **At a glance** · **Track:** Startups · **Built with Meta's Model API (Muse Spark 1.3)** · **Meta AI is the 12th platform Rankall scans** · **Results:** 9 of 11 judge businesses score under 45; ~$2.02–$2.13 per ~55s video; Spark-script retry proven live Oct 28.
 
 A business scans its AI visibility on Rankall, and gets back a **personalized
 video report** — a presenter who tells that business, from its own
@@ -17,6 +19,25 @@ its customers. Then one click claims the full written report.
 
 Every demo video on the judge page is labeled with its real run date as a
 **previously completed real run** — never presented as freshly generated.
+
+## The wound, as a chart
+
+![Scores of the 11 judge-page businesses](assets/wound-scores.svg)
+
+Most of these businesses score under 45 — that's the wound Rankall shows,
+from their own real scans.
+
+## What it costs, measured
+
+![Measured cost per video](assets/cost-per-video.svg)
+
+## What broke, and what fixed it
+
+![Spark script retry, proven Oct 28](assets/spark-retry.svg)
+
+## How it works
+
+![Pipeline: real scan to delivery page](assets/pipeline.svg)
 
 ## What was built during the hackathon (Oct 26 – Nov 4, 2026)
 
@@ -67,28 +88,6 @@ labeled prototype note (Product-tier pipeline proof: Dyson); the demo
 hero stays the low scorer. Pre-existing vs in-window split stays
 explicit: scan engine = pre-existing, video pipeline + this prototype
 note = in-window.
-
-## Architecture
-
-```mermaid
-flowchart LR
-    Scan[Real scan\n12 platforms] --> Agg[Aggregates only\nallowlist]
-    Agg --> Spark[Muse Spark 1.3\nwrites script]
-    Spark --> Director[Director agent\nverifies numbers]
-    Director --> TTS[ElevenLabs\nEric narration]
-    TTS --> HeyGen[HeyGen v3\nDante avatar]
-    HeyGen --> Page[Delivery page\nvideo + numbers + CTA]
-    Page --> Signup[Claim free report]
-    JobStore[(Supabase video_jobs\ncheckpoints + resume)] -.-> Spark
-    JobStore -.-> Director
-    JobStore -.-> TTS
-    JobStore -.-> HeyGen
-```
-
-A job checkpoints after every stage (input, script, director, narration
-asset, render-start, render-complete). A later poll resumes from the last
-checkpoint; a render id is only re-polled, never re-started; a stall past
-10 minutes with no progress fails honestly with the failed stage.
 
 ## Honesty layer (what the video will never do)
 

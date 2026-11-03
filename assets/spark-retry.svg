@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="380" viewBox="0 0 1000 380" font-family="Helvetica, Arial, sans-serif">
+  <rect x="2" y="2" width="996" height="376" rx="16" fill="#FFFFFF" stroke="#E2E2F0"/>
+  <text x="40" y="48" font-size="13" letter-spacing="2" fill="#5B5B7A">RELIABILITY &#183; SPARK SCRIPT RETRY &#183; PROVEN OCT 28</text>
+  <text x="40" y="80" font-size="30" font-weight="bold" fill="#0E0E2A">Empty script? Retry &#8212; don&#8217;t fall back.</text>
+  <text x="40" y="122" font-size="16" font-weight="bold" fill="#0E0E2A">Day 6 batch &#8212; 8 videos</text>
+  <g>
+    <rect x="40" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="84" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="128" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="172" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="216" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="260" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="304" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+    <rect x="348" y="140" width="34" height="34" rx="6" fill="#D9D9EA"/>
+  </g>
+  <text x="40" y="208" font-size="15" fill="#3A3A5C">0 used a Spark script &#8212; all 8 fell back to the flagged rule-based script.</text>
+  <text x="40" y="232" font-size="13" fill="#5B5B7A">That batch ran before the bounded retry existed.</text>
+  <line x1="500" y1="110" x2="500" y2="250" stroke="#E2E2F0"/>
+  <text x="540" y="122" font-size="16" font-weight="bold" fill="#0E0E2A">Retry proof &#8212; 1 job</text>
+  <g font-size="14" text-anchor="middle">
+    <circle cx="580" cy="157" r="20" fill="#FFFFFF" stroke="#B9B9D6" stroke-width="2"/>
+    <text x="580" y="162" fill="#5B5B7A">1</text>
+    <text x="580" y="196" font-size="12" fill="#5B5B7A">empty</text>
+    <circle cx="680" cy="157" r="20" fill="#FFFFFF" stroke="#B9B9D6" stroke-width="2"/>
+    <text x="680" y="162" fill="#5B5B7A">2</text>
+    <text x="680" y="196" font-size="12" fill="#5B5B7A">empty</text>
+    <circle cx="780" cy="157" r="20" fill="#1B17FF"/>
+    <text x="780" y="162" fill="#FFFFFF">3</text>
+    <text x="780" y="196" font-size="12" fill="#1B17FF">Spark script</text>
+  </g>
+  <text x="540" y="232" font-size="15" fill="#3A3A5C">Third attempt landed a Spark script. Job complete in 401s, $2.17.</text>
+  <text x="40" y="300" font-size="13" fill="#5B5B7A">Bounded cross-invocation retries: max 3 attempts, empty content only. The job stays processing and a later poll retries Spark instead of falling back immediately.</text>
+  <text x="40" y="324" font-size="13" fill="#5B5B7A">When Spark returns no usable script after retries, the video still uses the flagged rule-based fallback &#8212; flagged on the page, not hidden.</text>
+</svg>

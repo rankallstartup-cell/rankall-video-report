@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300" font-family="Helvetica, Arial, sans-serif">
+  <rect x="2" y="2" width="996" height="296" rx="16" fill="#F6F6FB" stroke="#E2E2F0"/>
+  <text x="40" y="52" font-size="13" letter-spacing="2" fill="#5B5B7A">RANKALL &#183; META GLOBAL AI DEVELOPER HACKATHON</text>
+  <text x="40" y="118" font-size="52" font-weight="bold" fill="#0E0E2A">Scan in.</text>
+  <text x="40" y="178" font-size="52" font-weight="bold" fill="#1B17FF">Video report out.</text>
+  <text x="40" y="222" font-size="17" fill="#3A3A5C">A real scan becomes a presenter who tells a business, from its own</text>
+  <text x="40" y="246" font-size="17" fill="#3A3A5C">numbers, where AI recommends it &#8212; and where competitors take its customers.</text>
+  <g font-size="14" font-weight="bold" text-anchor="middle">
+    <rect x="640" y="96" width="96" height="64" rx="10" fill="#FFFFFF" stroke="#1B17FF"/>
+    <text x="688" y="122" fill="#0E0E2A">Real scan</text>
+    <text x="688" y="142" font-size="12" font-weight="normal" fill="#5B5B7A">12 platforms</text>
+    <text x="748" y="132" font-size="20" fill="#1B17FF">&#8594;</text>
+    <rect x="772" y="96" width="96" height="64" rx="10" fill="#FFFFFF" stroke="#1B17FF"/>
+    <text x="820" y="122" fill="#0E0E2A">Director</text>
+    <text x="820" y="142" font-size="12" font-weight="normal" fill="#5B5B7A">checks numbers</text>
+    <text x="880" y="132" font-size="20" fill="#1B17FF">&#8594;</text>
+    <rect x="904" y="96" width="72" height="64" rx="10" fill="#1B17FF"/>
+    <text x="940" y="122" fill="#FFFFFF">Video</text>
+    <text x="940" y="142" font-size="12" font-weight="normal" fill="#FFFFFF">report</text>
+  </g>
+  <text x="808" y="200" font-size="13" fill="#5B5B7A" text-anchor="middle">One click claims the full written report.</text>
+</svg>

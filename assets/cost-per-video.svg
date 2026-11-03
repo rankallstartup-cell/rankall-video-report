@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="420" viewBox="0 0 1000 420" font-family="Helvetica, Arial, sans-serif">
+  <rect x="2" y="2" width="996" height="416" rx="16" fill="#FFFFFF" stroke="#E2E2F0"/>
+  <text x="40" y="48" font-size="13" letter-spacing="2" fill="#5B5B7A">COST PER VIDEO &#183; MEASURED &#183; ABOUT $0.038 PER SECOND</text>
+  <text x="40" y="80" font-size="30" font-weight="bold" fill="#0E0E2A">$2.02&#8211;$2.13 per ~55s video.</text>
+  <g font-size="15" text-anchor="middle">
+    <rect x="170" y="226" width="110" height="104" rx="6" fill="#1B17FF"/>
+    <text x="225" y="210" fill="#0E0E2A" font-weight="bold">$1.73</text>
+    <text x="225" y="352" fill="#0E0E2A">Folsom</text>
+    <text x="225" y="372" font-size="13" fill="#5B5B7A">45.8s</text>
+    <rect x="390" y="209" width="110" height="121" rx="6" fill="#1B17FF"/>
+    <text x="445" y="193" fill="#0E0E2A" font-weight="bold">$2.02</text>
+    <text x="445" y="352" fill="#0E0E2A">Kinsler</text>
+    <text x="445" y="372" font-size="13" fill="#5B5B7A">52.4s</text>
+    <rect x="610" y="202" width="110" height="128" rx="6" fill="#1B17FF"/>
+    <text x="665" y="186" fill="#0E0E2A" font-weight="bold">$2.13</text>
+    <text x="665" y="352" fill="#0E0E2A">Tech Ridge</text>
+    <text x="665" y="372" font-size="13" fill="#5B5B7A">55.8s</text>
+    <rect x="810" y="110" width="110" height="220" rx="6" fill="#0E0E2A"/>
+    <text x="865" y="94" fill="#0E0E2A" font-weight="bold">$3.67</text>
+    <text x="865" y="352" fill="#0E0E2A">Demo video</text>
+    <text x="865" y="372" font-size="13" fill="#5B5B7A">95.9s</text>
+  </g>
+  <text x="40" y="404" font-size="13" fill="#5B5B7A">Clean sequential runs plus the demo video. The Day 6 batch average (~$1.30) is excluded &#8212; a reload/concurrency artifact, not a per-video cost.</text>
+</svg>
