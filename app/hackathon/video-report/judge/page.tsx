@@ -16,6 +16,11 @@
 // to Tech Ridge Dental's delivery page, where its stored completed job
 // renders the How this video was made steps. Text only: no new renders,
 // no HeyGen spend, no card changes.
+//
+// Nov 2, 2026 (post-freeze exception, founder-approved): wound sentence
+// before the strip, hero number made exact (9 of 11), one Tech Ridge
+// proof card, chain extended to delivery. Text only: no new renders,
+// no HeyGen spend, no card changes.
 
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -131,11 +136,15 @@ export default async function JudgeModePage() {
           Pick a business. Watch its video.
         </h1>
         <p style={{ fontSize: 20, fontWeight: 700, lineHeight: 1.5, margin: '0 0 24px' }}>
-          Most of these businesses score under 45 — that&apos;s the wound Rankall shows, from their own real scans.
+          9 of the 11 businesses below score under 45 — that&apos;s the wound Rankall shows, from their own real scans.
         </p>
         <p style={{ fontSize: 18, lineHeight: 1.5, margin: '0 0 24px', color: GRAY }}>
           No login, no waiting on a scan. Each video below is a previously completed real run —
           labeled with its real date, never presented as freshly generated. Tap one and it plays.
+        </p>
+
+        <p style={{ fontSize: 18, lineHeight: 1.5, margin: '0 0 24px' }}>
+          Customers are already asking AI who to choose. Most businesses cannot see when AI recommends a competitor instead.
         </p>
 
         {/* HOW IT WORKS — 30-second strip + visible Meta chain (Nov 2, post-submission
@@ -150,7 +159,7 @@ export default async function JudgeModePage() {
             <strong>3. Video report.</strong> A presenter tells the business where AI recommends it — and where competitors take its customers.
           </p>
           <p style={{ fontSize: 15, lineHeight: 1.5, margin: '0 0 12px', color: GRAY }}>
-            How each video is made: real scan → Muse Spark script (Meta&apos;s Model API) → director verifies every number → voice + avatar render.
+            How each video is made: real scan → Muse Spark script (Meta&apos;s Model API) → director verifies every number → voice + avatar render → delivery.
           </p>
           {techRidgeCard && (
             <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>
@@ -158,6 +167,34 @@ export default async function JudgeModePage() {
                 See the checks behind one video
               </a>
               <span style={{ color: GRAY }}> — Tech Ridge Dental&apos;s page shows its How this video was made steps.</span>
+            </p>
+          )}
+        </div>
+
+        {/* PROOF — one checked example (Nov 2, post-freeze exception; text only,
+            numbers from Tech Ridge Dental's stored completed job, linked so a
+            judge can verify them on its delivery page). */}
+        <div style={card}>
+          <p style={{ color: BLUE, fontSize: 13, fontWeight: 700, margin: '0 0 12px', letterSpacing: 0.5 }}>
+            PROOF — ONE CHECKED EXAMPLE
+          </p>
+          <p style={{ fontSize: 16, lineHeight: 1.5, margin: '0 0 12px' }}>
+            <strong>Director verification: <span style={{ color: GREEN }}>PASS</span></strong>
+            <span style={{ color: GRAY }}> · Numbers checked: 13 · Errors found: 0</span>
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.5, margin: '0 0 12px', color: GRAY }}>
+            Without Rankall: raw scan numbers.
+          </p>
+          <p style={{ fontSize: 15, lineHeight: 1.5, margin: '0 0 12px', color: GRAY }}>
+            With Rankall: the same numbers director-checked and presented as a video.
+          </p>
+          {techRidgeCard && (
+            <p style={{ fontSize: 15, lineHeight: 1.5, margin: 0 }}>
+              <span style={{ color: GRAY }}>Example: Tech Ridge Dental — full steps on </span>
+              <a href={techRidgeCard.watchUrl} style={{ color: BLUE, fontWeight: 700 }}>
+                its delivery page
+              </a>
+              <span style={{ color: GRAY }}>.</span>
             </p>
           )}
         </div>
